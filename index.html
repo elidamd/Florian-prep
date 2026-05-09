@@ -855,7 +855,7 @@ footer {
 const CONFIG = {
   // Replace with your Google Sheets CSV URL
   // (File > Share > Publish to web > CSV > Sheet1)
-  SHEET_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRXdDYHy2jEIvM8Mp4_iUlobZVf3uUP6XyFeyHW-fWsh0XbxG4PcynqFvYJh1O3O0Ej9VTTjOrieij7/pub?output=csv',
+  SHEET_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRXdDYHy2jEIvM8Mp4_iUlobZVf3uUP6XyFeyHW-fWsh0XbxG4PcynqFvYJh1O3O0Ej9VTTjOrieij7/pub?output=tsv',
 
   // Your PayPal.me link (without the amount)
   PAYPAL_ME: 'https://paypal.me/EMDreer',
@@ -1057,7 +1057,7 @@ async function loadRegistry() {
 function parseCSV(text) {
   const lines = text.trim().split('\n').slice(1); // skip header
   return lines.map(line => {
-    const cols = line.split(',').map(c => c.trim().replace(/^"|"$/g, ''));
+    const cols = parseCSVLine(line);
     const C = CONFIG.COLS;
     return {
       id: cols[C.id],
@@ -1069,12 +1069,28 @@ function parseCSV(text) {
       priority: (cols[C.priority] || 'medium').toLowerCase(),
       description: cols[C.description] || '',
       description_de: cols[C.description_de] || cols[C.description] || '',
-      amazon_url: cols[C.amazon_url] || '',
+      amazon_url: sanitizeUrl(cols[C.amazon_url]),
       search_query: cols[C.search_query] || cols[C.name],
       reserved: (cols[C.reserved] || '').toLowerCase() === 'true' || (cols[C.reserved] || '') === '1',
       can_gift_used: (cols[C.can_gift_used] || '').toLowerCase() === 'true' || (cols[C.can_gift_used] || '') === '1'
     };
   }).filter(i => i.id);
+}
+
+// Properly handles TSV (tab-separated) fields — tabs never appear in descriptions or URLs
+function parseCSVLine(line) {
+  return line.split('\t').map(c => c.trim().replace(/^"|"$/g, ''));
+}
+
+// Ensure URL is absolute and well-formed
+function sanitizeUrl(url) {
+  if (!url) return '';
+  url = url.trim().replace(/^["']+|["']+$/g, ''); // strip stray quotes
+  if (!url) return '';
+  // Add https:// if missing
+  if (url.startsWith('www.')) url = 'https://' + url;
+  if (!url.startsWith('http')) return '';
+  return url;
 }
 
 // ─── RENDER ───
