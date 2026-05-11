@@ -4,741 +4,344 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Baby Registry 🌿</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #F7F3EE;
-  --surface: #FFFFFF;
-  --border: #E8E0D5;
-  --sage: #7A9E7E;
-  --sage-dark: #4F7A54;
-  --sage-light: #C8DECA;
-  --warm: #C4956A;
-  --warm-light: #F0E0CC;
-  --ink: #1E1A14;
-  --ink-mid: #5C5349;
-  --ink-soft: #9E9080;
-  --reserved: #A8C5A0;
-  --shadow-sm: 0 2px 12px rgba(30,26,20,0.07);
-  --shadow-md: 0 6px 28px rgba(30,26,20,0.11);
-  --shadow-lg: 0 16px 56px rgba(30,26,20,0.14);
-  --radius: 18px;
-  --radius-sm: 10px;
+  --cream:      #F5F0E8;
+  --parchment:  #EDE7D9;
+  --linen:      #E0D8C8;
+  --sage:       #8BAF8E;
+  --sage-deep:  #4A7050;
+  --sage-pale:  #D4E5D6;
+  --terra:      #C2714F;
+  --terra-pale: #F0DDD4;
+  --ink:        #1C1712;
+  --ink-mid:    #4A4238;
+  --ink-soft:   #8C7E6E;
+  --ink-faint:  #BDB0A0;
+  --white:      #FFFFFF;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans:  'Jost', sans-serif;
+  --sh-sm: 0 1px 8px rgba(28,23,18,.06);
+  --sh-md: 0 4px 24px rgba(28,23,18,.10);
+  --sh-lg: 0 12px 48px rgba(28,23,18,.16);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--cream);color:var(--ink);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 
-body {
-  font-family: 'Outfit', sans-serif;
-  background: var(--bg);
-  color: var(--ink);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+/* ── LANG ── */
+.lang-bar{position:fixed;top:18px;right:20px;z-index:400;display:flex;background:rgba(245,240,232,.92);backdrop-filter:blur(12px);border:1px solid var(--linen);border-radius:50px;padding:3px;box-shadow:var(--sh-sm)}
+.lang-btn{padding:5px 15px;border-radius:50px;border:none;background:transparent;font-family:var(--font-sans);font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;color:var(--ink-soft);transition:all .2s}
+.lang-btn.active{background:var(--ink);color:var(--cream)}
 
-/* ─── LANG SWITCHER ─── */
-.lang-bar {
-  position: fixed;
-  top: 16px; right: 20px;
-  z-index: 200;
-  display: flex;
-  gap: 4px;
-  background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(10px);
-  border-radius: 50px;
-  padding: 4px;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
-}
-.lang-btn {
-  padding: 5px 14px;
-  border-radius: 50px;
-  border: none;
-  background: transparent;
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.78rem;
-  font-weight: 500;
-  cursor: pointer;
-  color: var(--ink-soft);
-  transition: all 0.2s;
-}
-.lang-btn.active {
-  background: var(--sage-dark);
-  color: white;
-}
+/* ── HERO ── */
+.hero{position:relative;min-height:520px;display:grid;place-items:center;text-align:center;padding:100px 24px 80px;overflow:hidden;background:var(--ink)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 15% 110%,rgba(74,112,80,.5) 0%,transparent 60%),radial-gradient(ellipse 55% 50% at 88% -5%,rgba(139,175,142,.3) 0%,transparent 55%),radial-gradient(ellipse 40% 35% at 50% 50%,rgba(194,113,79,.1) 0%,transparent 70%);pointer-events:none}
+.hero-leaf{position:absolute;border-radius:50% 5% 50% 5%;pointer-events:none}
+.hl1{width:300px;height:400px;top:-80px;right:-50px;background:rgba(139,175,142,.08);transform:rotate(22deg)}
+.hl2{width:200px;height:280px;bottom:-40px;left:-30px;background:rgba(74,112,80,.08);transform:rotate(-18deg)}
+.hero-content{position:relative;z-index:1;max-width:580px}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:.68rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--sage);margin-bottom:22px}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';width:28px;height:1px;background:var(--sage);opacity:.5}
+.hero h1{font-family:var(--font-serif);font-size:clamp(2.8rem,7vw,5rem);font-weight:400;line-height:1.08;color:var(--cream);letter-spacing:-.02em}
+.hero h1 em{font-style:italic;color:var(--sage)}
+.hero-sub{margin-top:18px;font-size:.92rem;font-weight:300;color:rgba(245,240,232,.55);line-height:1.75}
+.hero-due{display:inline-flex;align-items:center;gap:10px;margin-top:28px;padding:9px 22px;border:1px solid rgba(139,175,142,.35);border-radius:50px;font-size:.8rem;color:rgba(245,240,232,.7);letter-spacing:.04em}
+.hero-due strong{color:var(--sage);font-weight:600}
 
-/* ─── HERO ─── */
-.hero {
-  position: relative;
-  min-height: 420px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 80px 24px 60px;
-  overflow: hidden;
-}
+/* ── STATS ── */
+.stats-ribbon{background:var(--sage-deep);display:flex;justify-content:center}
+.stat{flex:1;max-width:180px;text-align:center;padding:20px 12px;border-right:1px solid rgba(255,255,255,.1)}
+.stat:last-child{border-right:none}
+.stat-num{font-family:var(--font-serif);font-size:2rem;font-weight:700;color:var(--cream);display:block;line-height:1}
+.stat-lbl{font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,240,232,.5);margin-top:4px;display:block}
 
-.hero-bg {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(160deg, #4F7A54 0%, #7A9E7E 45%, #C8DECA 100%);
-}
+/* ── INSTRUCTIONS BANNER ── */
+.sh-banner{background:linear-gradient(135deg,#1C1712 0%,#2a241c 100%);border-bottom:1px solid rgba(255,255,255,.06);padding:44px 24px}
+.sh-inner-full{max-width:860px;margin:0 auto}
+.sh-header{margin-bottom:28px}
+.sh-tag{display:inline-block;font-size:.62rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--sage);background:rgba(139,175,142,.12);border:1px solid rgba(139,175,142,.25);border-radius:50px;padding:4px 14px;margin-bottom:14px}
+.sh-header h3{font-family:var(--font-serif);font-size:clamp(1.2rem,3vw,1.65rem);font-weight:400;color:var(--cream);line-height:1.3;margin-bottom:10px}
+.sh-intro{font-size:.83rem;color:rgba(245,240,232,.55);line-height:1.7;max-width:600px}
+.sh-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.sh-step{display:flex;align-items:flex-start;gap:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:18px}
+.sh-step-num{width:30px;height:30px;border-radius:50%;background:var(--sage-deep);color:white;font-size:.82rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sh-step-text{display:flex;flex-direction:column;gap:5px}
+.sh-step-text strong{font-size:.84rem;font-weight:600;color:var(--cream)}
+.sh-step-text span{font-size:.76rem;color:rgba(245,240,232,.5);line-height:1.6}
+.sh-pills{display:flex;flex-wrap:wrap;gap:6px}
+.sh-pill{padding:4px 13px;border-radius:50px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);font-size:.72rem;font-weight:500;color:rgba(245,240,232,.65)}
 
-/* leaf decorations */
-.hero-bg::before, .hero-bg::after {
-  content: '';
-  position: absolute;
-  border-radius: 50%;
-  opacity: 0.12;
-}
-.hero-bg::before {
-  width: 500px; height: 500px;
-  top: -150px; right: -100px;
-  background: white;
-}
-.hero-bg::after {
-  width: 300px; height: 300px;
-  bottom: -80px; left: -60px;
-  background: white;
-}
+/* ── EVENT FRAME ── */
+.event-wrap{background:var(--parchment);border-bottom:1px solid var(--linen);padding:40px 24px}
+.event-frame{max-width:860px;margin:0 auto;border:1.5px solid var(--linen);border-radius:24px;overflow:hidden;background:var(--white);box-shadow:var(--sh-md);display:grid;grid-template-columns:1fr 1fr}
+.event-photo{background:var(--parchment);min-height:260px;display:flex;align-items:center;justify-content:center;border-right:1.5px solid var(--linen);position:relative;overflow:hidden}
+.event-photo::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 70%,rgba(139,175,142,.18) 0%,transparent 60%),radial-gradient(circle at 80% 20%,rgba(194,113,79,.12) 0%,transparent 50%)}
+.photo-ph{position:relative;z-index:1;text-align:center;padding:32px}
+.photo-ph .ph-icon{font-size:2.8rem;opacity:.4;display:block;margin-bottom:10px}
+.photo-ph p{font-size:.72rem;color:var(--ink-soft);line-height:1.6;font-style:italic}
+.event-info{padding:36px 32px;display:flex;flex-direction:column;justify-content:center;gap:16px}
+.event-lbl{font-size:.62rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--sage-deep)}
+.event-ttl{font-family:var(--font-serif);font-size:1.6rem;font-weight:700;color:var(--ink);line-height:1.2}
+.event-ttl em{font-style:italic;color:var(--terra)}
+.event-details{display:flex;flex-direction:column;gap:9px}
+.event-row{display:flex;align-items:flex-start;gap:10px;font-size:.82rem;color:var(--ink-mid)}
+.event-icon{width:22px;height:22px;background:var(--sage-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.68rem;flex-shrink:0;margin-top:1px}
+.event-desc-txt{font-size:.8rem;color:var(--ink-soft);line-height:1.65;font-style:italic;border-top:1px solid var(--linen);padding-top:14px}
+@media(max-width:620px){.event-frame{grid-template-columns:1fr}.event-photo{min-height:160px;border-right:none;border-bottom:1.5px solid var(--linen)}}
 
-.hero-content { position: relative; z-index: 1; }
+/* ── NOTICE ── */
+.notice-wrap{max-width:900px;margin:0 auto;padding:28px 16px 0}
+.notice{background:var(--white);border:1px solid var(--linen);border-left:3px solid var(--sage-deep);border-radius:10px;padding:13px 18px;font-size:.79rem;color:var(--ink-mid);line-height:1.6;display:flex;gap:10px;align-items:flex-start;box-shadow:var(--sh-sm)}
+.notice-icon{font-size:.95rem;flex-shrink:0;margin-top:2px}
 
-.hero-eyebrow {
-  display: inline-block;
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.75);
-  margin-bottom: 14px;
-}
+/* ── MAIN ── */
+.main{max-width:900px;margin:0 auto;padding:28px 16px 80px}
 
-.hero h1 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(2.8rem, 7vw, 5rem);
-  font-weight: 300;
-  color: white;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-}
-.hero h1 em {
-  font-style: italic;
-  font-weight: 300;
-  color: #d4efcf;
-}
+/* ── FILTERS ── */
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:28px;align-items:center}
+.filter-tab{padding:7px 20px;border-radius:50px;border:1.5px solid var(--linen);background:transparent;font-family:var(--font-sans);font-size:.77rem;font-weight:500;letter-spacing:.03em;cursor:pointer;color:var(--ink-mid);transition:all .18s}
+.filter-tab:hover{border-color:var(--sage-deep);color:var(--sage-deep)}
+.filter-tab.active{background:var(--ink);border-color:var(--ink);color:var(--cream)}
+.filter-spacer{flex:1}
+.progress-text{font-size:.74rem;color:var(--ink-faint)}
 
-.hero-sub {
-  margin-top: 14px;
-  font-size: 1rem;
-  font-weight: 300;
-  color: rgba(255,255,255,0.8);
-  max-width: 420px;
-}
+/* ── SECTION TITLE ── */
+.section-title{font-family:var(--font-serif);font-size:1.3rem;font-weight:400;font-style:italic;color:var(--ink);margin:36px 0 16px;display:flex;align-items:center;gap:14px}
+.section-title::after{content:'';flex:1;height:1px;background:var(--linen)}
 
-.hero-due {
-  margin-top: 20px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.3);
-  backdrop-filter: blur(6px);
-  border-radius: 50px;
-  padding: 7px 18px;
-  font-size: 0.85rem;
-  color: white;
-  font-weight: 400;
-}
+/* ── GRID ── */
+.items-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:16px}
 
-/* ─── STATS BAR ─── */
-.stats-bar {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 18px 24px;
-  display: flex;
-  justify-content: center;
-  gap: 48px;
-  box-shadow: var(--shadow-sm);
-}
-.stat { text-align: center; }
-.stat-num {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.9rem;
-  font-weight: 600;
-  color: var(--sage-dark);
-  display: block;
-  line-height: 1;
-}
-.stat-lbl {
-  font-size: 0.72rem;
-  font-weight: 400;
-  color: var(--ink-soft);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
+/* ── CARD ── */
+.item-card{background:var(--white);border-radius:18px;border:1px solid var(--linen);box-shadow:var(--sh-sm);overflow:hidden;display:flex;flex-direction:column;transition:transform .22s cubic-bezier(.34,1.4,.64,1),box-shadow .22s;animation:riseIn .45s ease both}
+@keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.item-card:hover{transform:translateY(-4px);box-shadow:var(--sh-md)}
+.item-card.reserved{background:#EDEAE4;border-color:#D8D2C8;pointer-events:none;position:relative}
+.item-card.reserved::after{content:'';position:absolute;inset:0;background:rgba(237,234,228,.45);border-radius:18px;pointer-events:none}
+.item-card.reserved .card-name{color:var(--ink-faint)}
+.item-card.reserved .card-desc{color:var(--ink-faint);opacity:.7}
+.item-card.reserved .card-price{display:none}
+.item-card.reserved .card-strip{opacity:.2;filter:saturate(.2)}
+.item-card.reserved .card-img-wrap{filter:grayscale(1);opacity:.4}
+.item-card.reserved .card-category{opacity:.5}
 
-/* ─── NOTICE BANNER ─── */
-.notice {
-  background: var(--warm-light);
-  border-left: 3px solid var(--warm);
-  margin: 28px auto 0;
-  max-width: 860px;
-  border-radius: var(--radius-sm);
-  padding: 14px 18px;
-  font-size: 0.83rem;
-  color: var(--ink-mid);
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-}
-.notice-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+/* colour strip per category */
+.card-strip{height:3px;width:100%}
+.cat-bath      .card-strip{background:linear-gradient(90deg,#8ec4c8,#5fa8ad)}
+.cat-sleeping  .card-strip{background:linear-gradient(90deg,#a89ecf,#7b6fb5)}
+.cat-feeding   .card-strip{background:linear-gradient(90deg,#e8a87c,#c4714f)}
+.cat-clothing  .card-strip{background:linear-gradient(90deg,#8baf8e,#4a7050)}
+.cat-equipment .card-strip{background:linear-gradient(90deg,#c4a882,#9a7a52)}
+.cat-play      .card-strip{background:linear-gradient(90deg,#f0c040,#d4a020)}
+.cat-mobility  .card-strip{background:linear-gradient(90deg,#8baf8e,#4a7050)}
+.cat-other     .card-strip{background:linear-gradient(90deg,#b0a898,#8c7e6e)}
 
-/* ─── MAIN ─── */
-.main {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 28px 16px 80px;
-}
+.card-img{width:100%;height:130px;object-fit:contain;background:var(--parchment);border-bottom:1px solid var(--linen);padding:10px}
+.card-img-wrap{height:130px;background:var(--parchment);border-bottom:1px solid var(--linen);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.card-img-emoji{font-size:2.6rem;line-height:1}
+.card-top{padding:12px 18px 8px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.card-emoji{font-size:1.9rem;line-height:1;flex-shrink:0}
+.reserved-badge{font-size:.62rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;background:var(--sage-deep);color:white;padding:3px 10px;border-radius:50px;white-space:nowrap}
 
-/* ─── FILTER TABS ─── */
-.filter-row {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 24px;
-  align-items: center;
-}
-.filter-tab {
-  padding: 7px 18px;
-  border-radius: 50px;
-  border: 1.5px solid var(--border);
-  background: transparent;
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 500;
-  cursor: pointer;
-  color: var(--ink-mid);
-  transition: all 0.18s;
-}
-.filter-tab:hover { border-color: var(--sage); color: var(--sage-dark); }
-.filter-tab.active {
-  background: var(--sage-dark);
-  border-color: var(--sage-dark);
-  color: white;
-}
-.filter-spacer { flex: 1; }
-.progress-text {
-  font-size: 0.8rem;
-  color: var(--ink-soft);
-  font-weight: 400;
-}
+.card-body{padding:0 18px 18px;flex:1;display:flex;flex-direction:column}
+.card-category{font-size:.62rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:4px}
+.card-name{font-family:var(--font-serif);font-size:.98rem;font-weight:700;color:var(--ink);line-height:1.3;margin-bottom:7px}
+.card-desc{font-size:.74rem;color:var(--ink-soft);line-height:1.6;flex:1;margin-bottom:12px}
+.card-price{margin-bottom:14px}
+.price-label{font-size:.6rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);display:block;margin-bottom:1px}
+.price-value{font-size:.92rem;font-weight:600;color:var(--terra)}
 
-/* ─── SECTION TITLE ─── */
-.section-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.5rem;
-  font-weight: 400;
-  color: var(--ink);
-  margin: 32px 0 14px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.section-title span { font-size: 1.2rem; }
+/* ── BUTTONS ── */
+.card-footer{display:flex;flex-direction:column;gap:7px}
+.btn-row{display:flex;gap:7px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:9px 13px;border-radius:8px;font-family:var(--font-sans);font-size:.74rem;font-weight:500;cursor:pointer;border:none;transition:all .18s;text-decoration:none;white-space:nowrap;letter-spacing:.02em}
 
-/* ─── GRID ─── */
-.items-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 16px;
-}
+/* Amazon: dark/ink — prominent but not orange-loud */
+.btn-amazon{background:var(--ink);color:var(--cream);flex:1}
+.btn-amazon:hover{background:var(--ink-mid)}
 
-/* ─── CARD ─── */
-.item-card {
-  background: var(--surface);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
-  overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s;
-  border: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  animation: fadeUp 0.4s ease both;
-}
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.item-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
-.item-card.reserved {
-  opacity: 0.55;
-  pointer-events: none;
-}
-.item-card.gutschein-card { border-color: var(--warm); }
+/* Other stores: same visual weight, just outlined */
+.btn-search{background:transparent;border:1.5px solid var(--linen);color:var(--ink-mid);flex:1}
+.btn-search:hover{border-color:var(--ink-soft);color:var(--ink)}
 
-/* card emoji area */
-.card-visual {
-  height: 96px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3.2rem;
-  background: var(--bg);
-  position: relative;
-}
-.card-visual.cat-clothing { background: #EEF4FF; }
-.card-visual.cat-sleeping { background: #F0EEF8; }
-.card-visual.cat-feeding  { background: #FFF4EE; }
-.card-visual.cat-mobility { background: #EEFAF2; }
-.card-visual.cat-bath     { background: #EEF8FA; }
-.card-visual.cat-play     { background: #FEFAEE; }
-.card-visual.cat-gutschein { background: linear-gradient(135deg,#FFF0E6,#FDDCBE); }
+/* Mark as gifted: sage */
+.btn-reserve{background:var(--sage-pale);color:var(--sage-deep);border:1.5px solid rgba(74,112,80,.2);width:100%;font-weight:600}
+.btn-reserve:hover{background:var(--sage-deep);color:white}
 
-.reserved-badge {
-  position: absolute;
-  top: 8px; right: 8px;
-  background: var(--sage-dark);
-  color: white;
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  padding: 3px 9px;
-  border-radius: 50px;
-  text-transform: uppercase;
-}
+/* Second-hand: terracotta dashed, warm & inviting */
+.btn-gift-used{background:var(--terra-pale);color:var(--terra);border:1.5px dashed rgba(194,113,79,.5);width:100%;font-weight:500}
+.btn-gift-used:hover{background:var(--terra);color:white;border-style:solid}
 
-.card-body { padding: 14px 16px 16px; flex: 1; display: flex; flex-direction: column; }
+/* ── GUTSCHEIN ── */
+.gutschein-section{background:var(--ink);border-radius:24px;padding:40px;margin-top:48px;position:relative;overflow:hidden;color:var(--cream)}
+.gutschein-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 80% at 100% 100%,rgba(74,112,80,.28) 0%,transparent 60%),radial-gradient(ellipse 40% 50% at 0% 0%,rgba(194,113,79,.14) 0%,transparent 55%);pointer-events:none}
+.gutschein-section>*{position:relative}
+.gutschein-section h2{font-family:var(--font-serif);font-size:1.7rem;font-weight:400;font-style:italic;color:var(--cream);margin-bottom:8px}
+.gutschein-section>p{font-size:.82rem;color:rgba(245,240,232,.6);line-height:1.65;max-width:500px;margin-bottom:20px}
+.g-amounts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.amount-btn{padding:9px 20px;border-radius:50px;border:1.5px solid rgba(245,240,232,.18);background:transparent;font-family:var(--font-sans);font-size:.86rem;font-weight:600;color:rgba(245,240,232,.65);cursor:pointer;transition:all .18s}
+.amount-btn:hover,.amount-btn.active{background:var(--sage-deep);border-color:var(--sage-deep);color:white}
+.g-input-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.g-input-row input{width:100px;padding:9px 14px;border:1.5px solid rgba(245,240,232,.18);border-radius:50px;font-family:var(--font-sans);font-size:.88rem;background:rgba(255,255,255,.07);color:var(--cream);outline:none;text-align:center;transition:border-color .15s}
+.g-input-row input::placeholder{color:rgba(245,240,232,.28)}
+.g-input-row input:focus{border-color:var(--sage)}
+.currency-label{font-size:.8rem;color:rgba(245,240,232,.45)}
+.pay-panels{display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:start;margin-top:4px}
+.pay-col{display:flex;flex-direction:column;gap:10px}
+.pay-col-label{font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,240,232,.45);margin-bottom:2px}
+.pay-divider{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 20px;color:rgba(245,240,232,.2);font-size:.75rem;font-weight:500;min-height:60px;gap:6px}
+.pay-divider::before,.pay-divider::after{content:'';width:1px;height:30px;background:rgba(245,240,232,.1)}
+.pay-panel.hidden{display:none}
+@media(max-width:560px){.pay-panels{grid-template-columns:1fr}.pay-divider{flex-direction:row;padding:12px 0}.pay-divider::before,.pay-divider::after{width:40px;height:1px}}
+.btn-paypal{display:inline-flex;align-items:center;gap:7px;padding:11px 24px;border-radius:8px;background:#0070BA;color:white;font-family:var(--font-sans);font-size:.84rem;font-weight:600;border:none;cursor:pointer;text-decoration:none;transition:background .18s}
+.btn-paypal:hover{background:#005ea6}
+.pay-note{margin-top:10px;font-size:.73rem;color:rgba(245,240,232,.4);line-height:1.55}
+.iban-box{background:rgba(255,255,255,.05);border:1px solid rgba(245,240,232,.1);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:9px}
+.iban-row{display:flex;align-items:center;gap:10px;font-size:.81rem}
+.iban-lbl{width:68px;flex-shrink:0;font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(245,240,232,.32)}
+.iban-val{color:var(--cream);font-weight:400;flex:1;word-break:break-all}
+.copy-btn{padding:3px 11px;border-radius:50px;border:1px solid rgba(245,240,232,.18);background:transparent;font-size:.68rem;font-weight:500;cursor:pointer;color:var(--sage);transition:all .15s;white-space:nowrap}
+.copy-btn:hover{background:var(--sage-deep);color:white;border-color:var(--sage-deep)}
 
-.card-category {
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-  margin-bottom: 5px;
-}
+/* ── MODALS ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(28,23,18,.62);z-index:500;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .22s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--white);border-radius:22px;padding:32px;max-width:440px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--sh-lg);transform:translateY(24px) scale(.97);transition:transform .28s cubic-bezier(.34,1.4,.64,1)}
+.modal-overlay.open .modal{transform:translateY(0) scale(1)}
+.modal h3{font-family:var(--font-serif);font-size:1.3rem;font-weight:700;color:var(--ink);margin-bottom:8px}
+.modal p{font-size:.82rem;color:var(--ink-mid);line-height:1.65;margin-bottom:18px}
+.modal-actions{display:flex;gap:10px;margin-top:4px}
+.modal-actions .btn{flex:1;padding:11px;font-size:.82rem;border-radius:9px}
+.btn-cancel{background:var(--parchment);border:1.5px solid var(--linen);color:var(--ink-mid)}
+.btn-cancel:hover{border-color:var(--ink-soft);color:var(--ink)}
+.btn-confirm{background:var(--sage-deep);color:white}
+.btn-confirm:hover{background:var(--sage)}
+.stores-list{display:flex;flex-direction:column;gap:7px;margin:12px 0 14px}
+.store-link{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:8px;border:1.5px solid var(--linen);text-decoration:none;color:var(--ink);font-size:.82rem;font-weight:500;transition:all .15s;background:var(--cream)}
+.store-link:hover{border-color:var(--sage-deep);background:var(--sage-pale);color:var(--sage-deep)}
+.store-arrow{font-size:.75rem;opacity:.4}
+.store-note{font-size:.72rem;color:var(--ink-soft);line-height:1.55}
+.wa-box{background:var(--parchment);border-radius:10px;padding:14px 16px;margin-bottom:16px;font-size:.81rem;color:var(--ink-mid)}
+.wa-box a{color:var(--sage-deep);font-weight:600;text-decoration:none}
+.form-group{margin-bottom:12px}
+.form-label{display:block;font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:5px}
+.form-input{width:100%;padding:9px 13px;border:1.5px solid var(--linen);border-radius:8px;font-family:var(--font-sans);font-size:.84rem;color:var(--ink);background:var(--cream);outline:none;transition:border-color .15s}
+.form-input:focus{border-color:var(--sage-deep)}
 
-.card-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--ink);
-  line-height: 1.3;
-  margin-bottom: 5px;
-}
+/* ── TOAST ── */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(70px);background:var(--ink);color:var(--cream);padding:12px 26px;border-radius:50px;font-size:.8rem;font-weight:500;z-index:600;pointer-events:none;transition:transform .32s cubic-bezier(.34,1.4,.64,1);white-space:nowrap;letter-spacing:.02em}
+.toast.show{transform:translateX(-50%) translateY(0)}
 
-.card-desc {
-  font-size: 0.78rem;
-  color: var(--ink-mid);
-  line-height: 1.55;
-  flex: 1;
-  margin-bottom: 12px;
-}
+/* ── LOADING / EMPTY ── */
+.loading{text-align:center;padding:60px 20px;color:var(--ink-soft)}
+.spinner{width:30px;height:30px;border:2.5px solid var(--linen);border-top-color:var(--sage-deep);border-radius:50%;animation:spin .75s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error-msg{text-align:center;padding:40px;color:#b94040;font-size:.84rem}
+.empty{text-align:center;padding:60px 20px;color:var(--ink-soft)}
+.empty .big{font-size:2.5rem;margin-bottom:10px}
 
-.card-price {
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: var(--ink-mid);
-  margin-bottom: 12px;
-  font-family: 'Outfit', sans-serif;
-}
-.card-price .price-label {
-  font-size: 0.68rem;
-  font-weight: 400;
-  color: var(--ink-soft);
-  display: block;
-  letter-spacing: 0.04em;
-  margin-bottom: 1px;
-}
-.card-price .price-value { color: var(--warm); font-weight: 600; font-size: 1rem; }
-.card-price.gutschein .price-value { color: var(--sage-dark); }
+/* ── FOOTER ── */
+footer{text-align:center;padding:32px 16px;font-size:.72rem;color:var(--ink-faint);letter-spacing:.04em;border-top:1px solid var(--linen);margin-top:60px}
 
-.card-footer { display: flex; flex-direction: column; gap: 7px; }
-
-/* ─── BUTTONS ─── */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 9px 15px;
-  border-radius: 50px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 500;
-  cursor: pointer;
-  border: none;
-  transition: all 0.18s;
-  text-decoration: none;
-  white-space: nowrap;
-}
-.btn-amazon {
-  background: #FF9900;
-  color: #111;
-}
-.btn-amazon:hover { background: #e68a00; transform: translateY(-1px); }
-.btn-search {
-  background: transparent;
-  border: 1.5px solid var(--border);
-  color: var(--ink-mid);
-  font-size: 0.75rem;
-}
-.btn-search:hover { border-color: var(--sage); color: var(--sage-dark); }
-.btn-paypal {
-  background: #003087;
-  color: white;
-}
-.btn-paypal:hover { background: #002070; transform: translateY(-1px); }
-.btn-reserve {
-  background: var(--sage-light);
-  color: var(--sage-dark);
-  border: 1.5px solid var(--sage);
-  width: 100%;
-  margin-top: 4px;
-  font-weight: 600;
-}
-.btn-reserve:hover { background: var(--sage-dark); color: white; border-color: var(--sage-dark); }
-.btn-gift-used {
-  background: linear-gradient(135deg, #FFF3E6, #FFE0C0);
-  color: var(--warm);
-  border: 1.5px dashed #E0A060;
-  width: 100%;
-  margin-top: 4px;
-  font-weight: 500;
-  font-size: 0.76rem;
-}
-.btn-gift-used:hover { background: var(--warm); color: white; border-color: var(--warm); border-style: solid; }
-
-.btn-row { display: flex; gap: 7px; flex-wrap: wrap; }
-
-.stores-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin: 14px 0 18px;
-}
-.store-link {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: 1.5px solid var(--border);
-  text-decoration: none;
-  color: var(--ink);
-  font-size: 0.85rem;
-  font-weight: 500;
-  transition: all 0.15s;
-  background: var(--bg);
-}
-.store-link:hover { border-color: var(--sage-dark); background: var(--sage-light); color: var(--sage-dark); }
-.store-link .store-arrow { font-size: 0.75rem; opacity: 0.5; }
-.store-note { font-size: 0.75rem; color: var(--ink-soft); line-height: 1.5; }
-.gutschein-section {
-  background: linear-gradient(135deg, #FFF8F2, #FFE8D0);
-  border: 1.5px solid #F0C090;
-  border-radius: var(--radius);
-  padding: 28px;
-  margin-top: 36px;
-  position: relative;
-  overflow: hidden;
-}
-.gutschein-section::before {
-  content: '🎁';
-  position: absolute;
-  right: 20px; top: 16px;
-  font-size: 4rem;
-  opacity: 0.12;
-}
-.gutschein-section h2 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.5rem;
-  font-weight: 400;
-  color: var(--ink);
-  margin-bottom: 6px;
-}
-.gutschein-section p {
-  font-size: 0.83rem;
-  color: var(--ink-mid);
-  line-height: 1.6;
-  margin-bottom: 16px;
-  max-width: 520px;
-}
-.gutschein-amounts {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.amount-btn {
-  padding: 9px 20px;
-  border-radius: 50px;
-  border: 1.5px solid #E0A060;
-  background: white;
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--warm);
-  cursor: pointer;
-  transition: all 0.18s;
-}
-.amount-btn:hover, .amount-btn.active {
-  background: var(--warm);
-  color: white;
-  border-color: var(--warm);
-}
-.gutschein-input-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 14px;
-  flex-wrap: wrap;
-}
-.gutschein-input-row input {
-  width: 100px;
-  padding: 9px 13px;
-  border: 1.5px solid #E0A060;
-  border-radius: 50px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.9rem;
-  color: var(--ink);
-  background: white;
-  outline: none;
-  text-align: center;
-}
-.gutschein-input-row input:focus { border-color: var(--warm); }
-
-/* payment tabs */
-.pay-tabs {
-  display: flex;
-  gap: 8px;
-  margin: 18px 0 12px;
-}
-.pay-tab {
-  padding: 8px 18px;
-  border-radius: 50px;
-  border: 1.5px solid #E0A060;
-  background: white;
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.83rem;
-  font-weight: 500;
-  cursor: pointer;
-  color: var(--ink-mid);
-  transition: all 0.18s;
-}
-.pay-tab.active { background: var(--warm); color: white; border-color: var(--warm); }
-.pay-panel { }
-.pay-panel.hidden { display: none; }
-.pay-note {
-  font-size: 0.78rem;
-  color: var(--ink-mid);
-  margin-top: 10px;
-  line-height: 1.5;
-}
-
-/* IBAN box */
-.iban-box {
-  background: white;
-  border-radius: 12px;
-  padding: 14px 16px;
-  border: 1px solid #E8E0D5;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.iban-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.83rem;
-}
-.iban-lbl {
-  width: 72px;
-  flex-shrink: 0;
-  color: var(--ink-soft);
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-.iban-val {
-  color: var(--ink);
-  font-weight: 500;
-  font-family: monospace;
-  font-size: 0.88rem;
-  flex: 1;
-  word-break: break-all;
-}
-.copy-btn {
-  padding: 3px 10px;
-  border-radius: 50px;
-  border: 1px solid var(--border);
-  background: var(--bg);
-  font-size: 0.72rem;
-  cursor: pointer;
-  color: var(--sage-dark);
-  font-weight: 500;
-  transition: all 0.15s;
-  white-space: nowrap;
-}
-.copy-btn:hover { background: var(--sage-dark); color: white; }
-
-/* ─── MODAL ─── */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(30,26,20,0.55);
-  z-index: 300;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  backdrop-filter: blur(4px);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.22s;
-}
-.modal-overlay.open { opacity: 1; pointer-events: all; }
-
-.modal {
-  background: white;
-  border-radius: 22px;
-  padding: 32px;
-  max-width: 440px;
-  width: 100%;
-  box-shadow: var(--shadow-lg);
-  transform: translateY(24px) scale(0.97);
-  transition: transform 0.25s cubic-bezier(.34,1.4,.64,1);
-}
-.modal-overlay.open .modal { transform: translateY(0) scale(1); }
-
-.modal h3 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.4rem;
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-.modal p { font-size: 0.85rem; color: var(--ink-mid); line-height: 1.6; margin-bottom: 20px; }
-.modal-actions { display: flex; gap: 10px; }
-.modal-actions .btn { flex: 1; padding: 11px; font-size: 0.85rem; border-radius: 12px; }
-.btn-cancel { background: var(--bg); border: 1.5px solid var(--border); color: var(--ink-mid); }
-.btn-cancel:hover { border-color: var(--ink-soft); }
-.btn-confirm { background: var(--sage-dark); color: white; }
-.btn-confirm:hover { background: var(--sage); }
-
-/* ─── TOAST ─── */
-.toast {
-  position: fixed;
-  bottom: 28px; left: 50%;
-  transform: translateX(-50%) translateY(70px);
-  background: var(--ink);
-  color: white;
-  padding: 12px 24px;
-  border-radius: 50px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  z-index: 500;
-  pointer-events: none;
-  transition: transform 0.32s cubic-bezier(.34,1.4,.64,1);
-  white-space: nowrap;
-}
-.toast.show { transform: translateX(-50%) translateY(0); }
-
-/* ─── LOADING ─── */
-.loading {
-  text-align: center;
-  padding: 60px 20px;
-  color: var(--ink-soft);
-}
-.spinner {
-  width: 36px; height: 36px;
-  border: 3px solid var(--border);
-  border-top-color: var(--sage-dark);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin: 0 auto 14px;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.error-msg {
-  text-align: center;
-  padding: 40px 20px;
-  color: #c0392b;
-  font-size: 0.85rem;
-}
-
-/* ─── EMPTY ─── */
-.empty { text-align: center; padding: 60px 20px; color: var(--ink-soft); }
-.empty .big { font-size: 2.5rem; margin-bottom: 10px; }
-
-/* ─── FOOTER ─── */
-footer {
-  text-align: center;
-  padding: 32px 16px;
-  font-size: 0.75rem;
-  color: var(--ink-soft);
-  border-top: 1px solid var(--border);
-  margin-top: 40px;
-}
-
-/* ─── RESPONSIVE ─── */
-@media (max-width: 560px) {
-  .stats-bar { gap: 24px; }
-  .hero h1 { font-size: 2.4rem; }
-  .items-grid { grid-template-columns: 1fr; }
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  .sh-inner{grid-template-columns:1fr}
+  .hero h1{font-size:2.6rem}
+  .items-grid{grid-template-columns:1fr}
+  .gutschein-section{padding:28px 20px}
 }
 </style>
 </head>
 <body>
 
-<!-- Language switcher -->
 <div class="lang-bar">
   <button class="lang-btn active" onclick="setLang('en')">EN</button>
   <button class="lang-btn" onclick="setLang('de')">DE</button>
 </div>
 
-<!-- Hero -->
+<!-- HERO -->
 <section class="hero">
-  <div class="hero-bg"></div>
+  <div class="hero-leaf hl1"></div>
+  <div class="hero-leaf hl2"></div>
   <div class="hero-content">
     <span class="hero-eyebrow" id="hero-eyebrow">Our Baby Registry</span>
     <h1 id="hero-title">A little one<br>is <em>on the way</em></h1>
     <p class="hero-sub" id="hero-sub">We're so grateful you're here. Here's what our baby needs — and how you can help.</p>
-    <div class="hero-due" id="hero-due">🌿 Due: <strong id="due-date-text">Loading…</strong></div>
+    <div class="hero-due" id="hero-due">🌿 Due: <strong></strong></div>
   </div>
 </section>
 
-<!-- Stats bar -->
-<div class="stats-bar">
-  <div class="stat">
-    <span class="stat-num" id="stat-total">–</span>
-    <span class="stat-lbl" id="lbl-total">Items</span>
-  </div>
-  <div class="stat">
-    <span class="stat-num" id="stat-available">–</span>
-    <span class="stat-lbl" id="lbl-available">Available</span>
-  </div>
-  <div class="stat">
-    <span class="stat-num" id="stat-reserved">–</span>
-    <span class="stat-lbl" id="lbl-reserved">Gifted</span>
+<!-- STATS -->
+<div class="stats-ribbon">
+  <div class="stat"><span class="stat-num" id="stat-total">–</span><span class="stat-lbl" id="lbl-total">Items</span></div>
+  <div class="stat"><span class="stat-num" id="stat-available">–</span><span class="stat-lbl" id="lbl-available">Available</span></div>
+  <div class="stat"><span class="stat-num" id="stat-reserved">–</span><span class="stat-lbl" id="lbl-reserved">Gifted</span></div>
+</div>
+
+<!-- EVENT FRAME -->
+<div class="event-wrap">
+  <div class="event-frame">
+    <div class="event-photo">
+      <!-- To add a real photo replace .photo-ph with: <img src="URL" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0"> -->
+      <div class="photo-ph">
+        <span class="ph-icon">🌿</span>
+        <p>Add your photo here.<br>Replace this block with an &lt;img&gt; tag.</p>
+      </div>
+    </div>
+    <div class="event-info">
+      <span class="event-lbl" id="event-lbl">Baby Shower</span>
+      <div class="event-ttl" id="event-ttl">Join us for <em>a celebration</em></div>
+      <div class="event-details">
+        <div class="event-row"><div class="event-icon">📅</div><span id="event-date">Add date in CONFIG.EVENT</span></div>
+        <div class="event-row"><div class="event-icon">📍</div><span id="event-location">Add location in CONFIG.EVENT</span></div>
+        <div class="event-row"><div class="event-icon">⏰</div><span id="event-time">Add time in CONFIG.EVENT</span></div>
+      </div>
+      <p class="event-desc-txt" id="event-desc">We're so happy to be surrounded by the people we love. Whether you join us in person or from afar — thank you for being part of this journey.</p>
+    </div>
   </div>
 </div>
 
-<!-- Main content -->
-<div class="main">
+<!-- HOW IT WORKS / INSTRUCTIONS BANNER -->
+<div class="sh-banner">
+  <div class="sh-inner-full">
+    <div class="sh-header">
+      <span class="sh-tag" id="sh-tag">How it works</span>
+      <h3 id="sh-title">Your presence is the best gift — but if you'd like to give, here's how 💛</h3>
+      <p class="sh-intro" id="sh-intro">We've put together this list to make it easy. Browse, choose, and follow the steps below. New or second-hand — every gift is received with the same love.</p>
+    </div>
+    <div class="sh-steps">
+      <div class="sh-step">
+        <div class="sh-step-num">1</div>
+        <div class="sh-step-text"><strong id="sh-s1t">Browse &amp; choose</strong><span id="sh-s1d">Find something you'd like to give. Each card shows an estimated price and links to Amazon.de or other stores.</span></div>
+      </div>
+      <div class="sh-step">
+        <div class="sh-step-num">2</div>
+        <div class="sh-step-text"><strong id="sh-s2t">Mark as gifted</strong><span id="sh-s2d">Click "Mark as gifted" so others know it's taken — no duplicates! Leave your name so we know who to thank.</span></div>
+      </div>
+      <div class="sh-step">
+        <div class="sh-step-num">3</div>
+        <div class="sh-step-text"><strong id="sh-s3t">New, used or cash — all welcome!</strong><span id="sh-s3d">We happily accept second-hand items in good condition. Or send a cash Gutschein (bottom of page) so we can shop second-hand ourselves.</span></div>
+      </div>
+    </div>
 
-  <!-- Amazon notice -->
+  </div>
+</div>
+
+<!-- NOTICE -->
+<div class="notice-wrap">
   <div class="notice">
     <span class="notice-icon">💡</span>
-    <span id="notice-text">Items link directly to Amazon.de. If you purchase from our Amazon Wish List, we receive a <strong>15% Gutschein</strong> — which helps us buy more things we need. You can also search other stores using the alternative links.</span>
+    <span id="notice-text">Items link directly to Amazon.de. Buying through our wish list gives us a <strong>15% Gutschein</strong> — which we use to buy more essentials. Each card also has an <strong>Other stores</strong> button if you prefer shopping elsewhere.</span>
   </div>
+</div>
 
-  <!-- Filter tabs -->
-  <div class="filter-row" style="margin-top:24px">
+<!-- MAIN -->
+<div class="main">
+  <div class="filter-row" style="margin-top:0">
     <button class="filter-tab active" onclick="filterCategory('all')" id="tab-all">All</button>
     <button class="filter-tab" onclick="filterCategory('available')" id="tab-available">Available</button>
     <button class="filter-tab" onclick="filterCategory('reserved')" id="tab-reserved">Reserved</button>
@@ -746,641 +349,525 @@ footer {
     <span class="progress-text" id="progress-text"></span>
   </div>
 
-  <!-- Dynamic content -->
   <div id="registry-content">
-    <div class="loading">
-      <div class="spinner"></div>
-      <p id="loading-text">Loading registry…</p>
-    </div>
+    <div class="loading"><div class="spinner"></div><p id="loading-text">Loading registry…</p></div>
   </div>
 
-  <!-- Gutschein Section -->
-  <div class="gutschein-section" id="gutschein-section">
+  <!-- GUTSCHEIN -->
+  <div class="gutschein-section">
     <h2 id="gutschein-title">🎁 Send a Gutschein</h2>
-    <p id="gutschein-desc">Prefer to give cash so we can shop second-hand (Vinted, Mamikreisel, local markets)? Choose an amount or enter your own — we'll use it for exactly what we need most.</p>
-
-    <div class="gutschein-amounts" id="gutschein-amounts">
+    <p id="gutschein-desc">Prefer to give cash so we can shop second-hand? Choose an amount or enter your own — we'll use it for exactly what we need most.</p>
+    <div class="g-amounts">
       <button class="amount-btn" onclick="selectAmount(10)">€10</button>
       <button class="amount-btn" onclick="selectAmount(20)">€20</button>
       <button class="amount-btn" onclick="selectAmount(30)">€30</button>
       <button class="amount-btn" onclick="selectAmount(50)">€50</button>
     </div>
-
-    <div class="gutschein-input-row">
+    <div class="g-input-row">
       <span class="currency-label">€</span>
-      <input type="number" id="custom-amount" placeholder="other" min="5" max="500" oninput="syncAmount(this.value)" />
+      <input type="number" id="custom-amount" placeholder="other" min="5" max="500" oninput="syncAmount(this.value)"/>
       <span class="currency-label" id="gutschein-hint">amount in EUR</span>
     </div>
-
-    <!-- Payment tabs -->
-    <div class="pay-tabs">
-      <button class="pay-tab active" onclick="switchTab('paypal', this)" id="tab-paypal">💙 PayPal</button>
-      <button class="pay-tab" onclick="switchTab('bank', this)" id="tab-bank">🏦 Bank Transfer</button>
-    </div>
-
-    <!-- PayPal panel -->
-    <div class="pay-panel" id="panel-paypal">
-      <a id="paypal-btn" href="#" class="btn btn-paypal" onclick="sendPaypal(event)">
-        💙 <span id="paypal-btn-text">Send via PayPal</span>
-      </a>
-      <p class="pay-note" id="paypal-note">Opens PayPal with the amount pre-filled. You can pay by card too — no PayPal account needed.</p>
-    </div>
-
-    <!-- Bank / IBAN panel -->
-    <div class="pay-panel hidden" id="panel-bank">
-      <div class="iban-box" id="iban-box">
-        <div class="iban-row"><span class="iban-lbl" id="iban-lbl-name">Name</span><span class="iban-val" id="iban-name">—</span></div>
-        <div class="iban-row"><span class="iban-lbl">IBAN</span><span class="iban-val" id="iban-val">—</span><button class="copy-btn" onclick="copyIBAN()" id="copy-btn">Copy</button></div>
-        <div class="iban-row"><span class="iban-lbl">BIC</span><span class="iban-val" id="iban-bic">—</span></div>
-        <div class="iban-row"><span class="iban-lbl">Bank</span><span class="iban-val" id="iban-bank">—</span></div>
-        <div class="iban-row"><span class="iban-lbl" id="iban-lbl-ref">Reference</span><span class="iban-val" id="iban-ref" style="color:var(--sage-dark);font-weight:600">Baby Gift 🌿</span></div>
+    <div class="pay-panels">
+      <div class="pay-col">
+        <div class="pay-col-label">💙 PayPal</div>
+        <a id="paypal-btn" href="#" class="btn-paypal" onclick="sendPaypal(event)">Send via PayPal</a>
+        <p class="pay-note" id="paypal-note">Opens PayPal with the amount pre-filled. No account needed — card works too.</p>
       </div>
-      <p class="pay-note" id="bank-note">Please include the reference so we know it's from you. Amount: <strong id="bank-amount">—</strong></p>
+      <div class="pay-divider"><span id="pay-or-label">or</span></div>
+      <div class="pay-col" id="panel-bank">
+        <div class="pay-col-label">🏦 Bank Transfer</div>
+        <div class="iban-box">
+          <div class="iban-row"><span class="iban-lbl">Name</span><span class="iban-val" id="iban-name">—</span></div>
+          <div class="iban-row"><span class="iban-lbl">IBAN</span><span class="iban-val" id="iban-val">—</span><button class="copy-btn" onclick="copyIBAN()" id="copy-btn">Copy</button></div>
+          <div class="iban-row"><span class="iban-lbl">BIC</span><span class="iban-val" id="iban-bic">—</span></div>
+          <div class="iban-row"><span class="iban-lbl">Bank</span><span class="iban-val" id="iban-bank">—</span></div>
+          <div class="iban-row"><span class="iban-lbl">Ref.</span><span class="iban-val" style="color:var(--sage);font-weight:600">Baby Gift 🌿</span></div>
+        </div>
+        <p class="pay-note" id="bank-note">Amount: <strong id="bank-amount">—</strong> · Include the reference please!</p>
+      </div>
     </div>
   </div>
-
 </div>
 
-<!-- Reserve Modal -->
+<!-- MODALS -->
 <div class="modal-overlay" id="modal" onclick="closeModal(event)">
   <div class="modal">
     <h3 id="modal-title">Reserve this gift?</h3>
-    <p id="modal-desc">This will mark the item as reserved so others know it's taken. This cannot be undone automatically — please only confirm if you plan to buy it.</p>
+    <p id="modal-desc">This will mark the item as reserved so others know it's taken. Please only confirm if you plan to buy it.</p>
+    <div class="form-group">
+      <label class="form-label" id="modal-name-label">Your name (optional)</label>
+      <input type="text" id="gifter-name" class="form-input" placeholder="e.g. Maria" autocomplete="name"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label" id="modal-msg-label">Message for us (optional)</label>
+      <input type="text" id="gifter-msg" class="form-input" placeholder="e.g. Can't wait to meet the little one!"/>
+    </div>
+    <p style="font-size:.7rem;color:var(--ink-faint);line-height:1.5;margin-bottom:14px" id="modal-email-note">We'll receive a quiet notification — the gift list updates for everyone automatically.</p>
     <div class="modal-actions">
       <button class="btn btn-cancel" onclick="closeModalBtn()" id="modal-cancel">Cancel</button>
-      <button class="btn btn-confirm" onclick="confirmReserve()" id="modal-confirm">Yes, I'll gift this</button>
+      <button class="btn btn-confirm" onclick="confirmReserve()" id="modal-confirm">Yes, I'll gift this!</button>
     </div>
   </div>
 </div>
 
-<!-- Gift Used Modal -->
 <div class="modal-overlay" id="modal-used" onclick="closeModalUsed(event)">
   <div class="modal">
-    <h3 id="modal-used-title">Gift a second-hand item?</h3>
-    <p id="modal-used-desc">That's wonderful! Please contact us directly so we can coordinate. We happily accept second-hand items in good condition.</p>
-    <div style="background:#F7F3EE;border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:0.85rem;color:#5C5349;">
-      📱 <strong id="modal-used-whatsapp-label">WhatsApp us:</strong> <a href="https://wa.me/YOUR_NUMBER" id="modal-used-whatsapp" style="color:#4F7A54;font-weight:600;">+49 XXX XXXXXXX</a><br>
-      <span style="font-size:0.78rem;opacity:0.7;margin-top:4px;display:block;" id="modal-used-hint">Replace with your number in index.html → CONFIG.WHATSAPP</span>
+    <h3 id="modal-used-title">That's wonderful! 💚</h3>
+    <p id="modal-used-desc">We're so happy to keep the circular cycle alive. Leave your name and a message if you'd like — we'll reach out to coordinate the details.</p>
+    <div class="form-group">
+      <label class="form-label" id="modal-used-name-label">Your name (optional)</label>
+      <input type="text" id="gifter-used-name" class="form-input" placeholder="e.g. Maria" autocomplete="name"/>
     </div>
+    <div class="form-group">
+      <label class="form-label" id="modal-used-msg-label">Details or message (optional)</label>
+      <input type="text" id="gifter-used-msg" class="form-input" placeholder="e.g. I have a gently used Babyschlafsack TOG 2.5"/>
+    </div>
+    <p style="font-size:.72rem;color:var(--ink-soft);line-height:1.55;margin-bottom:16px" id="modal-used-note">After confirming, we will receive a notification with your details and reach out to coordinate.</p>
     <div class="modal-actions">
-      <button class="btn btn-cancel" onclick="closeModalUsedBtn()" id="modal-used-close">Close</button>
-      <button class="btn btn-confirm" onclick="confirmReserve(); closeModalUsedBtn();" id="modal-used-confirm">Mark as reserved too</button>
+      <button class="btn btn-cancel" onclick="closeModalUsedBtn()" id="modal-used-close">Cancel</button>
+      <button class="btn btn-confirm" onclick="confirmGiftUsed()" id="modal-used-confirm">Send &amp; reserve</button>
     </div>
   </div>
 </div>
 
-<!-- Other Stores Modal -->
 <div class="modal-overlay" id="modal-stores" onclick="closeModalStores(event)">
   <div class="modal">
     <h3 id="modal-stores-title">Buy from another store</h3>
-    <p id="modal-stores-desc" style="margin-bottom:8px"></p>
     <div class="stores-list" id="stores-list"></div>
-    <p class="store-note" id="stores-note">These links search for the product by name. Results may vary — feel free to compare prices!</p>
-    <div class="modal-actions" style="margin-top:12px">
-      <button class="btn btn-cancel" onclick="closeModalStoresBtn()" id="modal-stores-close">Close</button>
+    <p class="store-note" id="stores-note">Links search by product name. Results may vary — worth comparing!</p>
+    <div class="modal-actions" style="margin-top:14px">
+      <button class="btn btn-cancel" onclick="closeModalStoresBtn()">Close</button>
     </div>
   </div>
 </div>
-<div class="toast" id="toast"></div>
 
-<!-- Footer -->
-<footer>
-  <span id="footer-text">Made with love 🌿 — Please let us know if you reserve something!</span>
-</footer>
+<div class="toast" id="toast"></div>
+<footer><span id="footer-text">Made with love 🌿 · Please let us know when you reserve something!</span></footer>
 
 <script>
 // ══════════════════════════════════════════════
-//  ⚙️  CONFIGURATION — EDIT THESE VALUES
+//  ⚙️  CONFIGURATION
 // ══════════════════════════════════════════════
 const CONFIG = {
-  // Replace with your Google Sheets CSV URL
-  // (File > Share > Publish to web > CSV > Sheet1)
-  SHEET_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRXdDYHy2jEIvM8Mp4_iUlobZVf3uUP6XyFeyHW-fWsh0XbxG4PcynqFvYJh1O3O0Ej9VTTjOrieij7/pub?output=tsv',
-
-  // Your PayPal.me link (without the amount)
-  PAYPAL_ME: 'https://paypal.me/EMDreer',
-
-  // Bank transfer details (shown as an alternative to PayPal)
-  // Leave IBAN empty ('') to hide this option
+  SHEET_URL:    'YOUR_GOOGLE_SHEETS_TSV_URL_HERE',
+  PAYPAL_ME:    'https://paypal.me/YOURNAME',
+  WHATSAPP:     'YOUR_WHATSAPP_NUMBER',   // e.g. '4915112345678'
   BANK: {
-    name: 'Pollyana Ferreira dos Santos',          // e.g. 'Ana Silva'
-    iban: 'DE02 1001 1001 2627 1299 30', // your IBAN
-    bic:  'NTSBDEB1XXX',        // N26 BIC
+    name: 'YOUR NAME',
+    iban: 'DE00 0000 0000 0000 0000 00',
+    bic:  'NTSBDEB1XXX',
     bank: 'N26 Bank',
   },
-
-  // Due date
-  DUE_DATE: '25.Jul 2026',
-
-  // Baby name or "Baby"
-  BABY_NAME: 'Florian',
-
-  // Parent names
-  PARENT_NAMES: 'Polly & Élida',
-
-  // Your WhatsApp number for second-hand gift coordination (international format, no spaces/+)
-  WHATSAPP: 'YOUR_WHATSAPP_NUMBER',  // e.g. '4915752636194'
-  // Must match your Google Sheet columns exactly:
-  // id | name | name_de | category | emoji | price | priority | description | description_de | amazon_url | search_query | reserved | can_gift_used
-  COLS: {
-    id: 0, name: 1, name_de: 2, category: 3, emoji: 4,
-    price: 5, priority: 6, description: 7, description_de: 8,
-    amazon_url: 9, search_query: 10, reserved: 11, can_gift_used: 12
-  }
+  DUE_DATE:     'September 2025',
+  EVENT: {
+    date:     'Saturday, XX Month 2025',
+    time:     'XX:00 Uhr',
+    location: 'Your address here',
+    desc_en:  "We're so happy to be surrounded by the people we love. Whether you join us in person or from afar — thank you for being part of this journey.",
+    desc_de:  "Wir freuen uns so sehr, von den Menschen umgeben zu sein, die wir lieben. Ob du persönlich dabei bist oder aus der Ferne — danke, dass du Teil dieser Reise bist.",
+  },
+  // ── EMAIL (EmailJS) ──────────────────────────────────────────────────
+  // Sign up free at emailjs.com, create a service + template, paste IDs here
+  EMAIL: {
+    service_id:  'YOUR_EMAILJS_SERVICE_ID',   // e.g. 'service_abc123'
+    template_id: 'YOUR_EMAILJS_TEMPLATE_ID',  // e.g. 'template_xyz789'
+    public_key:  'YOUR_EMAILJS_PUBLIC_KEY',   // e.g. 'AbCdEfGhIjKlMnOp'
+    to_email:    'YOUR_EMAIL@example.com',    // where notifications go
+  },
+  // ─────────────────────────────────────────────────────────────────────
+  COLS: { id:0,name:1,name_de:2,category:3,emoji:4,price:5,priority:6,description:7,description_de:8,amazon_url:9,search_query:10,reserved:11,can_gift_used:12 }
 };
 // ══════════════════════════════════════════════
 
-let lang = 'en';
-let allItems = [];
-let currentFilter = 'all';
-let pendingReserveId = null;
+let lang='en', allItems=[], currentFilter='all', pendingReserveId=null;
 
 const STRINGS = {
   en: {
-    eyebrow: 'Our Baby Registry',
-    title_html: `A little one<br>is <em>on the way</em>`,
-    sub: "We're so grateful you're here. Here's what our baby needs — and how you can help.",
-    due: '🌿 Due:',
-    lbl_total: 'Items', lbl_available: 'Available', lbl_reserved: 'Gifted',
-    notice: `Items link directly to Amazon.de. If you purchase from our <strong>Amazon Wish List</strong>, we receive a <strong>15% Gutschein</strong> — which helps us buy more things we need. You can also search other stores using the alternative links.`,
-    tab_all: 'All', tab_available: 'Available', tab_reserved: 'Reserved',
-    loading: 'Loading registry…',
-    priority: { high: 'High priority', medium: 'Medium', low: 'Nice to have' },
-    price_label: 'Estimated price',
-    btn_amazon: '🛒 Buy on Amazon',
-    btn_search: '🏪 Other stores',
-    btn_reserve: '✓ Mark as gifted',
-    btn_gift_used: '♻️ I have this — I can gift it!',
-    modal_gift_used_title: 'Gift a second-hand item?',
-    modal_gift_used_desc: 'That\'s wonderful! Please contact us directly so we can coordinate. We happily accept second-hand items in good condition.',
-    modal_stores_title: (name) => `Where to buy: ${name}`,
-    modal_stores_note: 'These links search for this product by name. Results may vary — feel free to compare prices and check 2nd-hand options too!',
-    stores: [
-      { name: 'dm Online Shop', url: 'https://www.dm.de/search?query=', icon: '🔵' },
-      { name: 'Rossmann Online', url: 'https://www.rossmann.de/de/search/?q=', icon: '🔴' },
-      { name: 'Otto.de', url: 'https://www.otto.de/suche/', icon: '🟠' },
-      { name: 'Babymarkt.de', url: 'https://www.babymarkt.de/search/?q=', icon: '🟢' },
-      { name: 'Vinted (2nd hand)', url: 'https://www.vinted.de/catalog?search_text=', icon: '♻️' },
-      { name: 'eBay Kleinanzeigen', url: 'https://www.kleinanzeigen.de/s/', icon: '🟡' },
+    eyebrow:'Our Baby Registry',
+    title_html:`A little one<br>is <em>on the way</em>`,
+    sub:"We're so grateful you're here. Here's what our baby needs — and how you can help.",
+    due:'🌿 Due:',
+    lbl_total:'Items',lbl_available:'Available',lbl_reserved:'Gifted',
+    sh_tag:'How it works',
+    sh_title:"Your presence is the best gift — but if you'd like to give, here's how 💛",
+    sh_intro:"We've put together this list to make it easy. Browse, choose, and follow the steps. New or second-hand — every gift is received with the same love.",
+    sh_s1t:'Browse & choose',sh_s1d:'Find something you\'d like to give. Each card shows an estimated price and links to Amazon.de or other stores.',
+    sh_s2t:'Mark as gifted',sh_s2d:'Click "Mark as gifted" so others know it\'s taken — no duplicates! Leave your name so we know who to thank.',
+    sh_s3t:'New, used or cash — all welcome!',sh_s3d:'We happily accept second-hand items in good condition. Or send a cash Gutschein (bottom of page) so we can shop second-hand ourselves.',
+    event_lbl:'Baby Shower',event_ttl:'Join us for <em>a celebration</em>',
+    notice:`We put together our wish list on Amazon to make it easy — but we want to offer you more options. By purchasing through the <strong>Amazon link</strong>, the gift is sent directly to our home. For any items still on the list, we also receive a <strong>discount on our next purchase</strong>. You can also use the Other Stores button to find the item elsewhere.`,
+    tab_all:'All',tab_available:'Available',tab_reserved:'Reserved',
+    loading:'Loading registry…',
+    price_label:'Estimated price',
+    btn_amazon:'🛒 Amazon',btn_search:'🏪 Other stores',
+    btn_reserve:'✓ Mark as gifted',
+    btn_gift_used:'♻️ I have this — I can gift it!',
+    modal_gift_used_title:"That's wonderful! 💚",
+    modal_gift_used_desc:"We're so happy to keep the circular cycle alive. Leave your name and a message if you'd like — we'll reach out to coordinate the details.",
+    modal_used_name_label:'Your name (optional)',
+    modal_used_msg_label:'Details or message (optional)',
+    modal_used_note:'After confirming, we will receive a notification with your details and reach out to coordinate.',
+    modal_stores_title:(n)=>`Where to find: ${n}`,
+    modal_stores_note:'Links search by product name. Results may vary — worth comparing!',
+    stores:[
+      {name:'dm Online Shop',url:'https://www.dm.de/search?query=',icon:'🔵'},
+      {name:'Rossmann Online',url:'https://www.rossmann.de/de/search/?q=',icon:'🔴'},
+      {name:'Otto.de',url:'https://www.otto.de/suche/',icon:'🟠'},
+      {name:'Babymarkt.de',url:'https://www.babymarkt.de/search/?q=',icon:'🟢'},
+      {name:'Vinted (2nd hand)',url:'https://www.vinted.de/catalog?search_text=',icon:'♻️'},
+      {name:'eBay Kleinanzeigen',url:'https://www.kleinanzeigen.de/s/',icon:'🟡'},
     ],
-    reserved_badge: 'Reserved',
-    gutschein_title: '🎁 Send a Gutschein',
-    gutschein_desc: 'Prefer to give cash so we can shop second-hand (Vinted, Mamikreisel, local markets)? Choose an amount or enter your own — we\'ll use it for exactly what we need most.',
-    gutschein_hint: 'amount in EUR',
-    paypal_btn: '💙 Send via PayPal',
-    modal_title: 'Reserve this gift?',
-    modal_desc: 'This will mark the item as reserved so others know it\'s taken. Please only confirm if you plan to buy it.',
-    modal_cancel: 'Cancel',
-    modal_confirm: 'Yes, I\'ll gift this!',
-    toast_reserved: '✓ Marked as gifted — thank you! 💚',
-    progress: (a, t) => `${a} of ${t} still available`,
-    footer: 'Made with love 🌿 — Please let us know if you reserve something!',
-    error: 'Could not load the registry. Please try again later.',
-    empty_all: 'No items found.',
-    empty_filter: 'Nothing here — check another tab!',
-    category_labels: {
-      clothing: '👕 Clothing', sleeping: '😴 Sleeping', feeding: '🍼 Feeding',
-      mobility: '🚗 Mobility', bath: '🛁 Bath & Care', play: '🧸 Play & Learn',
-      gutschein: '🎁 Gutschein', other: '📦 Other'
-    }
+    reserved_badge:'Reserved',
+    gutschein_title:'🎁 Send a Gutschein',
+    gutschein_desc:"Prefer to give cash so we can shop second-hand? Choose an amount or enter your own — we'll use it for exactly what we need most.",
+    gutschein_hint:'amount in EUR',
+    modal_title:'Reserve this gift?',modal_desc:"This will mark the item as reserved so others know it's taken. Please only confirm if you plan to buy it.",modal_name_label:'Your name (optional)',modal_msg_label:'Message for us (optional)',
+    modal_cancel:'Cancel',modal_confirm:"Yes, I'll gift this!",
+    toast_reserved:'✓ Marked as gifted — thank you! 💚',
+    progress:(a,t)=>`${a} of ${t} still available`,
+    footer:'Made with love 🌿 · Please let us know when you reserve something!',
+    error:'Could not load the registry. Please try again later.',
+    empty_all:'No items found.',empty_filter:'Nothing here — check another tab!',
+    category_labels:{clothing:'👕 Clothing',sleeping:'😴 Sleeping',feeding:'🍼 Feeding',mobility:'🚗 Mobility',bath:'🛁 Bath & Care',play:'🧸 Play',equipment:'🔧 Equipment',gutschein:'🎁 Gutschein',other:'📦 Other'}
   },
   de: {
-    eyebrow: 'Unsere Wunschliste',
-    title_html: `Ein kleines Wunder<br>ist <em>unterwegs</em>`,
-    sub: 'Wir freuen uns, dass du da bist. Hier ist, was unser Baby braucht — und wie du helfen kannst.',
-    due: '🌿 Termin:',
-    lbl_total: 'Artikel', lbl_available: 'Verfügbar', lbl_reserved: 'Verschenkt',
-    notice: `Artikel verlinken direkt zu Amazon.de. Bei Käufen über unsere <strong>Amazon-Wunschliste</strong> erhalten wir einen <strong>15% Gutschein</strong>. Du kannst auch andere Läden über den Alternativ-Link suchen.`,
-    tab_all: 'Alle', tab_available: 'Verfügbar', tab_reserved: 'Reserviert',
-    loading: 'Liste wird geladen…',
-    priority: { high: 'Hohe Priorität', medium: 'Mittel', low: 'Wäre schön' },
-    price_label: 'Ungefährer Preis',
-    btn_amazon: '🛒 Bei Amazon kaufen',
-    btn_search: '🏪 Andere Läden',
-    btn_reserve: '✓ Als verschenkt markieren',
-    btn_gift_used: '♻️ Das habe ich — ich kann es schenken!',
-    modal_gift_used_title: 'Second-Hand Geschenk anbieten?',
-    modal_gift_used_desc: 'Wie wunderbar! Bitte kontaktiere uns direkt, damit wir alles koordinieren können. Wir nehmen gerne gut erhaltene gebrauchte Artikel.',
-    modal_stores_title: (name) => `Wo kaufen: ${name}`,
-    modal_stores_note: 'Diese Links suchen das Produkt nach Namen. Ergebnisse können abweichen — Preise vergleichen lohnt sich!',
-    stores: [
-      { name: 'dm Online Shop', url: 'https://www.dm.de/search?query=', icon: '🔵' },
-      { name: 'Rossmann Online', url: 'https://www.rossmann.de/de/search/?q=', icon: '🔴' },
-      { name: 'Otto.de', url: 'https://www.otto.de/suche/', icon: '🟠' },
-      { name: 'Babymarkt.de', url: 'https://www.babymarkt.de/search/?q=', icon: '🟢' },
-      { name: 'Vinted (2nd Hand)', url: 'https://www.vinted.de/catalog?search_text=', icon: '♻️' },
-      { name: 'eBay Kleinanzeigen', url: 'https://www.kleinanzeigen.de/s/', icon: '🟡' },
+    eyebrow:'Unsere Wunschliste',
+    title_html:`Ein kleines Wunder<br>ist <em>unterwegs</em>`,
+    sub:'Wir freuen uns, dass du da bist. Hier ist, was unser Baby braucht — und wie du helfen kannst.',
+    due:'🌿 Termin:',
+    lbl_total:'Artikel',lbl_available:'Verfügbar',lbl_reserved:'Verschenkt',
+    sh_tag:'So funktioniert es',
+    sh_title:'Deine Anwesenheit ist das schönste Geschenk — aber falls du etwas mitbringen möchtest, hier ist wie 💛',
+    sh_intro:'Wir haben diese Liste zusammengestellt, um es einfach zu machen. Stöbere, wähle etwas aus und folge den Schritten. Neu oder gebraucht — jedes Geschenk wird mit derselben Liebe empfangen.',
+    sh_s1t:'Stöbern & auswählen',sh_s1d:'Finde etwas, das du schenken möchtest. Jede Karte zeigt einen ungefähren Preis und Links zu Amazon.de oder anderen Läden.',
+    sh_s2t:'Als verschenkt markieren',sh_s2d:'Klicke auf „Als verschenkt markieren", damit andere wissen, dass es vergeben ist. Hinterlasse deinen Namen, damit wir wissen, wem wir danken dürfen.',
+    sh_s3t:'Neu, gebraucht oder Geld — alles willkommen!',sh_s3d:'Wir nehmen gerne gut erhaltene Second-Hand-Artikel. Oder schick uns einen Gutschein (unten), damit wir selbst bei Vinted & Co. einkaufen können.',
+    event_lbl:'Baby Shower',event_ttl:'Feiert mit uns <em>diesen Moment</em>',
+    notice:`Wir haben unsere Wunschliste bei Amazon zusammengestellt — aber wir möchten euch mehr Optionen geben. Wenn du über den <strong>Amazon-Link</strong> kaufst, wird das Geschenk direkt zu uns nach Hause geliefert. Für die noch verfügbaren Artikel erhalten wir außerdem einen <strong>Rabatt auf unseren nächsten Einkauf</strong>. Du kannst auch den Button "Andere Läden" nutzen, um das Produkt woanders zu finden.`,
+    tab_all:'Alle',tab_available:'Verfügbar',tab_reserved:'Reserviert',
+    loading:'Liste wird geladen…',
+    price_label:'Ungefährer Preis',
+    btn_amazon:'🛒 Amazon',btn_search:'🏪 Andere Läden',
+    btn_reserve:'✓ Als verschenkt markieren',
+    btn_gift_used:'♻️ Das habe ich — ich kann es schenken!',
+    modal_gift_used_title:'Wie wunderbar! 💚',
+    modal_gift_used_desc:'Wir freuen uns, den Kreislauf am Leben zu halten! Hinterlasse deinen Namen und eine Nachricht — wir melden uns, um alles zu koordinieren.',
+    modal_used_name_label:'Dein Name (optional)',
+    modal_used_msg_label:'Details oder Nachricht (optional)',
+    modal_used_note:'Nach dem Bestätigen erhalten wir eine Benachrichtigung mit deinen Angaben und melden uns bei dir.',
+    modal_stores_title:(n)=>`Wo kaufen: ${n}`,
+    modal_stores_note:'Links suchen nach Produktnamen. Ergebnisse können abweichen.',
+    stores:[
+      {name:'dm Online Shop',url:'https://www.dm.de/search?query=',icon:'🔵'},
+      {name:'Rossmann Online',url:'https://www.rossmann.de/de/search/?q=',icon:'🔴'},
+      {name:'Otto.de',url:'https://www.otto.de/suche/',icon:'🟠'},
+      {name:'Babymarkt.de',url:'https://www.babymarkt.de/search/?q=',icon:'🟢'},
+      {name:'Vinted (2nd Hand)',url:'https://www.vinted.de/catalog?search_text=',icon:'♻️'},
+      {name:'eBay Kleinanzeigen',url:'https://www.kleinanzeigen.de/s/',icon:'🟡'},
     ],
-    reserved_badge: 'Reserviert',
-    gutschein_title: '🎁 Gutschein senden',
-    gutschein_desc: 'Lieber Geld geben, damit wir Second-Hand einkaufen können (Vinted, Mamikreisel, Flohmärkte)? Wähle einen Betrag oder gib deinen eigenen ein.',
-    gutschein_hint: 'Betrag in EUR',
-    paypal_btn: '💙 Per PayPal senden',
-    modal_title: 'Geschenk reservieren?',
-    modal_desc: 'Der Artikel wird als reserviert markiert, damit andere wissen, dass er bereits vergeben ist. Bitte nur bestätigen, wenn du ihn kaufen möchtest.',
-    modal_cancel: 'Abbrechen',
-    modal_confirm: 'Ja, ich schenke das!',
-    toast_reserved: '✓ Als verschenkt markiert — Danke! 💚',
-    progress: (a, t) => `${a} von ${t} noch verfügbar`,
-    footer: 'Mit Liebe gemacht 🌿 — Bitte sag uns Bescheid, wenn du etwas reservierst!',
-    error: 'Liste konnte nicht geladen werden. Bitte versuche es später erneut.',
-    empty_all: 'Keine Artikel gefunden.',
-    empty_filter: 'Nichts hier — schau in einem anderen Tab!',
-    category_labels: {
-      clothing: '👕 Kleidung', sleeping: '😴 Schlafen', feeding: '🍼 Ernährung',
-      mobility: '🚗 Mobilität', bath: '🛁 Bad & Pflege', play: '🧸 Spielen & Lernen',
-      gutschein: '🎁 Gutschein', other: '📦 Sonstiges'
-    }
+    reserved_badge:'Reserviert',
+    gutschein_title:'🎁 Gutschein senden',
+    gutschein_desc:'Lieber Geld geben, damit wir Second-Hand einkaufen können? Wähle einen Betrag oder gib deinen eigenen ein.',
+    gutschein_hint:'Betrag in EUR',
+    modal_title:'Geschenk reservieren?',modal_desc:'Der Artikel wird als reserviert markiert. Bitte nur bestätigen, wenn du ihn kaufen möchtest.',modal_name_label:'Dein Name (optional)',modal_msg_label:'Nachricht für uns (optional)',
+    modal_cancel:'Abbrechen',modal_confirm:'Ja, ich schenke das!',
+    toast_reserved:'✓ Als verschenkt markiert — Danke! 💚',
+    progress:(a,t)=>`${a} von ${t} noch verfügbar`,
+    footer:'Mit Liebe gemacht 🌿 · Bitte sag uns Bescheid, wenn du etwas reservierst!',
+    error:'Liste konnte nicht geladen werden.',
+    empty_all:'Keine Artikel gefunden.',empty_filter:'Nichts hier — schau in einem anderen Tab!',
+    category_labels:{clothing:'👕 Kleidung',sleeping:'😴 Schlafen',feeding:'🍼 Ernährung',mobility:'🚗 Mobilität',bath:'🛁 Bad & Pflege',play:'🧸 Spielen',equipment:'🔧 Ausstattung',gutschein:'🎁 Gutschein',other:'📦 Sonstiges'}
   }
 };
 
-function t(key, ...args) {
-  const s = STRINGS[lang];
-  if (typeof s[key] === 'function') return s[key](...args);
-  return s[key] || key;
+function t(k,...a){const s=STRINGS[lang];return typeof s[k]==='function'?s[k](...a):s[k]||k}
+
+function setLang(l){
+  lang=l;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
+  applyStrings();renderContent();
 }
 
-function setLang(l) {
-  lang = l;
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent === l.toUpperCase()));
-  applyStrings();
-  renderContent();
+function applyStrings(){
+  const s=STRINGS[lang];
+  document.getElementById('hero-eyebrow').textContent=s.eyebrow;
+  document.getElementById('hero-title').innerHTML=s.title_html;
+  document.getElementById('hero-sub').textContent=s.sub;
+  document.getElementById('hero-due').innerHTML=`${s.due} <strong>${CONFIG.DUE_DATE}</strong>`;
+  document.getElementById('lbl-total').textContent=s.lbl_total;
+  document.getElementById('lbl-available').textContent=s.lbl_available;
+  document.getElementById('lbl-reserved').textContent=s.lbl_reserved;
+  document.getElementById('sh-tag').textContent=s.sh_tag||'How it works';
+  document.getElementById('sh-title').textContent=s.sh_title;
+  document.getElementById('sh-intro').textContent=s.sh_intro||'';
+  document.getElementById('sh-s1t').textContent=s.sh_s1t||'';
+  document.getElementById('sh-s1d').textContent=s.sh_s1d||'';
+  document.getElementById('sh-s2t').textContent=s.sh_s2t||'';
+  document.getElementById('sh-s2d').textContent=s.sh_s2d||'';
+  document.getElementById('sh-s3t').textContent=s.sh_s3t||'';
+  document.getElementById('sh-s3d').textContent=s.sh_s3d||'';
+  document.getElementById('event-lbl').textContent=s.event_lbl;
+  document.getElementById('event-ttl').innerHTML=s.event_ttl;
+  document.getElementById('event-date').textContent=CONFIG.EVENT.date;
+  document.getElementById('event-time').textContent=CONFIG.EVENT.time;
+  document.getElementById('event-location').textContent=CONFIG.EVENT.location;
+  document.getElementById('event-desc').textContent=lang==='de'?CONFIG.EVENT.desc_de:CONFIG.EVENT.desc_en;
+  document.getElementById('notice-text').innerHTML=s.notice;
+  document.getElementById('tab-all').textContent=s.tab_all;
+  document.getElementById('tab-available').textContent=s.tab_available;
+  document.getElementById('tab-reserved').textContent=s.tab_reserved;
+  document.getElementById('gutschein-title').textContent=s.gutschein_title;
+  document.getElementById('gutschein-desc').textContent=s.gutschein_desc;
+  document.getElementById('gutschein-hint').textContent=s.gutschein_hint;
+  document.getElementById('paypal-btn').innerHTML=lang==='de'?'💙 Per PayPal senden':'💙 Send via PayPal';
+  document.getElementById('modal-title').textContent=s.modal_title;
+  document.getElementById('modal-desc').textContent=s.modal_desc;
+  document.getElementById('modal-cancel').textContent=s.modal_cancel;
+  document.getElementById('modal-confirm').textContent=s.modal_confirm;
+  if(s.modal_name_label) document.getElementById('modal-name-label').textContent=s.modal_name_label;
+  if(s.modal_msg_label)  document.getElementById('modal-msg-label').textContent=s.modal_msg_label;
+  document.getElementById('footer-text').textContent=s.footer;
+  // Gift used modal
+  const muTitle=document.getElementById('modal-used-title');
+  const muDesc=document.getElementById('modal-used-desc');
+  const muNote=document.getElementById('modal-used-note');
+  const muNameLbl=document.getElementById('modal-used-name-label');
+  const muMsgLbl=document.getElementById('modal-used-msg-label');
+  if(muTitle) muTitle.textContent=s.modal_gift_used_title||'';
+  if(muDesc)  muDesc.textContent=s.modal_gift_used_desc||'';
+  if(muNote)  muNote.textContent=s.modal_used_note||'';
+  if(muNameLbl) muNameLbl.textContent=s.modal_used_name_label||'';
+  if(muMsgLbl)  muMsgLbl.textContent=s.modal_used_msg_label||'';
 }
 
-function applyStrings() {
-  const s = STRINGS[lang];
-  document.getElementById('hero-eyebrow').textContent = s.eyebrow;
-  document.getElementById('hero-title').innerHTML = s.title_html;
-  document.getElementById('hero-sub').textContent = s.sub;
-  document.getElementById('hero-due').innerHTML = `${s.due} <strong>${CONFIG.DUE_DATE}</strong>`;
-  document.getElementById('lbl-total').textContent = s.lbl_total;
-  document.getElementById('lbl-available').textContent = s.lbl_available;
-  document.getElementById('lbl-reserved').textContent = s.lbl_reserved;
-  document.getElementById('notice-text').innerHTML = s.notice;
-  document.getElementById('tab-all').textContent = s.tab_all;
-  document.getElementById('tab-available').textContent = s.tab_available;
-  document.getElementById('tab-reserved').textContent = s.tab_reserved;
-  document.getElementById('gutschein-title').textContent = s.gutschein_title;
-  document.getElementById('gutschein-desc').textContent = s.gutschein_desc;
-  document.getElementById('gutschein-hint').textContent = s.gutschein_hint;
-  document.getElementById('paypal-btn').innerHTML = `💙 ${s.paypal_btn.replace('💙 ', '')}`;
-  document.getElementById('modal-title').textContent = s.modal_title;
-  document.getElementById('modal-desc').textContent = s.modal_desc;
-  document.getElementById('modal-cancel').textContent = s.modal_cancel;
-  document.getElementById('modal-confirm').textContent = s.modal_confirm;  document.getElementById('footer-text').textContent = s.footer;
+async function loadRegistry(){
+  const c=document.getElementById('registry-content');
+  if(CONFIG.SHEET_URL==='YOUR_GOOGLE_SHEETS_TSV_URL_HERE'){allItems=DEMO_ITEMS;updateStats();renderContent();return;}
+  try{
+    const r=await fetch(CONFIG.SHEET_URL);if(!r.ok)throw new Error();
+    allItems=parseCSV(await r.text());updateStats();renderContent();
+  }catch(e){c.innerHTML=`<div class="error-msg">⚠️ ${t('error')}</div>`}
 }
 
-// ─── LOAD FROM GOOGLE SHEETS ───
-async function loadRegistry() {
-  const container = document.getElementById('registry-content');
-
-  // Demo data if no sheet configured
-  if (CONFIG.SHEET_URL === 'YOUR_GOOGLE_SHEETS_CSV_URL_HERE') {
-    allItems = DEMO_ITEMS;
-    updateStats();
-    renderContent();
-    return;
-  }
-
-  try {
-    const res = await fetch(CONFIG.SHEET_URL);
-    if (!res.ok) throw new Error('Network error');
-    const text = await res.text();
-    allItems = parseCSV(text);
-    updateStats();
-    renderContent();
-  } catch (e) {
-    container.innerHTML = `<div class="error-msg">⚠️ ${t('error')}</div>`;
-  }
+function parseCSV(text){
+  return text.trim().split('\n').slice(1).map(line=>{
+    const c=line.split('\t').map(x=>x.trim().replace(/^"|"$/g,''));
+    const C=CONFIG.COLS;
+    return{id:c[C.id],name:c[C.name],name_de:c[C.name_de]||c[C.name],
+      category:(c[C.category]||'other').toLowerCase(),emoji:c[C.emoji]||'📦',price:c[C.price]||'',
+      priority:(c[C.priority]||'medium').toLowerCase(),description:c[C.description]||'',
+      description_de:c[C.description_de]||c[C.description]||'',
+      amazon_url:sanitizeUrl(c[C.amazon_url]),search_query:c[C.search_query]||c[C.name],
+      reserved:(c[C.reserved]||'').toLowerCase()==='true'||(c[C.reserved]||'')==='1',
+      can_gift_used:(c[C.can_gift_used]||'').toLowerCase()==='true'||(c[C.can_gift_used]||'')==='1'};
+  }).filter(i=>i.id);
 }
 
-function parseCSV(text) {
-  const lines = text.trim().split('\n').slice(1); // skip header
-  return lines.map(line => {
-    const cols = parseCSVLine(line);
-    const C = CONFIG.COLS;
-    return {
-      id: cols[C.id],
-      name: cols[C.name],
-      name_de: cols[C.name_de] || cols[C.name],
-      category: (cols[C.category] || 'other').toLowerCase(),
-      emoji: cols[C.emoji] || '📦',
-      price: cols[C.price] || '',
-      priority: (cols[C.priority] || 'medium').toLowerCase(),
-      description: cols[C.description] || '',
-      description_de: cols[C.description_de] || cols[C.description] || '',
-      amazon_url: sanitizeUrl(cols[C.amazon_url]),
-      search_query: cols[C.search_query] || cols[C.name],
-      reserved: (cols[C.reserved] || '').toLowerCase() === 'true' || (cols[C.reserved] || '') === '1',
-      can_gift_used: (cols[C.can_gift_used] || '').toLowerCase() === 'true' || (cols[C.can_gift_used] || '') === '1'
-    };
-  }).filter(i => i.id);
+function sanitizeUrl(u){
+  if(!u)return'';u=u.trim().replace(/^["']+|["']+$/g,'');
+  if(!u)return'';if(u.startsWith('www.'))u='https://'+u;
+  if(!u.startsWith('http'))return'';return u;
 }
 
-// Properly handles TSV (tab-separated) fields — tabs never appear in descriptions or URLs
-function parseCSVLine(line) {
-  return line.split('\t').map(c => c.trim().replace(/^"|"$/g, ''));
+function updateStats(){
+  const tot=allItems.length,res=allItems.filter(i=>i.reserved).length,av=tot-res;
+  document.getElementById('stat-total').textContent=tot;
+  document.getElementById('stat-available').textContent=av;
+  document.getElementById('stat-reserved').textContent=res;
+  document.getElementById('progress-text').textContent=t('progress',av,tot);
 }
 
-// Ensure URL is absolute and well-formed
-function sanitizeUrl(url) {
-  if (!url) return '';
-  url = url.trim().replace(/^["']+|["']+$/g, ''); // strip stray quotes
-  if (!url) return '';
-  // Add https:// if missing
-  if (url.startsWith('www.')) url = 'https://' + url;
-  if (!url.startsWith('http')) return '';
-  return url;
-}
-
-// ─── RENDER ───
-function updateStats() {
-  const total = allItems.length;
-  const reserved = allItems.filter(i => i.reserved).length;
-  const available = total - reserved;
-  document.getElementById('stat-total').textContent = total;
-  document.getElementById('stat-available').textContent = available;
-  document.getElementById('stat-reserved').textContent = reserved;
-  document.getElementById('progress-text').textContent = t('progress', available, total);
-}
-
-function renderContent() {
-  const container = document.getElementById('registry-content');
-  const s = STRINGS[lang];
-
-  let items = allItems;
-  if (currentFilter === 'available') items = items.filter(i => !i.reserved);
-  if (currentFilter === 'reserved')  items = items.filter(i =>  i.reserved);
-
-  if (items.length === 0) {
-    container.innerHTML = `<div class="empty"><div class="big">🌿</div><p>${currentFilter === 'all' ? s.empty_all : s.empty_filter}</p></div>`;
-    return;
-  }
-
-  // Group by category
-  const groups = {};
-  items.forEach(item => {
-    const cat = item.category || 'other';
-    if (!groups[cat]) groups[cat] = [];
-    groups[cat].push(item);
+function renderContent(){
+  const c=document.getElementById('registry-content'),s=STRINGS[lang];
+  let items=allItems;
+  if(currentFilter==='available')items=items.filter(i=>!i.reserved);
+  if(currentFilter==='reserved')items=items.filter(i=>i.reserved);
+  if(!items.length){c.innerHTML=`<div class="empty"><div class="big">🌿</div><p>${currentFilter==='all'?s.empty_all:s.empty_filter}</p></div>`;return;}
+  const groups={};
+  items.forEach(i=>{const k=i.category||'other';if(!groups[k])groups[k]=[];groups[k].push(i);});
+  const ORDER=['clothing','sleeping','feeding','mobility','bath','equipment','play','gutschein','other'];
+  const cats=Object.keys(groups).sort((a,b)=>(ORDER.indexOf(a)<0?99:ORDER.indexOf(a))-(ORDER.indexOf(b)<0?99:ORDER.indexOf(b)));
+  let html='';
+  cats.forEach(cat=>{
+    html+=`<div class="section-title">${s.category_labels[cat]||cat}</div><div class="items-grid">`;
+    groups[cat].forEach(item=>{html+=renderCard(item);});
+    html+=`</div>`;
   });
-
-  // Category order
-  const ORDER = ['clothing','sleeping','feeding','mobility','bath','play','gutschein','other'];
-  const sortedCats = Object.keys(groups).sort((a,b) => {
-    const ai = ORDER.indexOf(a), bi = ORDER.indexOf(b);
-    return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
-  });
-
-  let html = '';
-  sortedCats.forEach(cat => {
-    const label = s.category_labels[cat] || cat;
-    html += `<div class="section-title"><span></span>${label}</div>`;
-    html += `<div class="items-grid">`;
-    groups[cat].forEach(item => { html += renderCard(item); });
-    html += `</div>`;
-  });
-
-  container.innerHTML = html;
-
-  // Stagger animation
-  container.querySelectorAll('.item-card').forEach((el, i) => {
-    el.style.animationDelay = `${i * 40}ms`;
-  });
+  c.innerHTML=html;
+  c.querySelectorAll('.item-card').forEach((el,i)=>{el.style.animationDelay=`${i*32}ms`;});
 }
 
-function renderCard(item) {
-  const s = STRINGS[lang];
-  const name = lang === 'de' ? item.name_de : item.name;
-  const desc = lang === 'de' ? item.description_de : item.description;
-  const catClass = `cat-${item.category}`;
-  const isReserved = item.reserved;
+function renderCard(item){
+  const s=STRINGS[lang];
+  const name=lang==='de'?item.name_de:item.name;
+  const desc=lang==='de'?item.description_de:item.description;
+  const ir=item.reserved;
+  const amazonBtn=item.amazon_url?`<a href="${item.amazon_url}" target="_blank" rel="noopener" class="btn btn-amazon">${s.btn_amazon}</a>`:'';
+  const searchBtn=`<button class="btn btn-search" onclick="openStoresModal('${item.id}')">${s.btn_search}</button>`;
+  const reserveBtn=!ir?`<button class="btn btn-reserve" onclick="openModal('${item.id}')">${s.btn_reserve}</button>`:'';
+  const giftBtn=!ir&&item.can_gift_used?`<button class="btn btn-gift-used" onclick="openGiftUsedModal('${item.id}')">${s.btn_gift_used}</button>`:'';
+  const badge=ir?`<div class="reserved-badge">${s.reserved_badge}</div>`:'';
+  const price=item.price?`<div class="card-price"><span class="price-label">${s.price_label}</span><span class="price-value">~€${item.price}</span></div>`:'';
+  const catLabel=(s.category_labels[item.category]||item.category).replace(/^.+?\s/,'');
 
-  const amazonBtn = item.amazon_url
-    ? `<a href="${item.amazon_url}" target="_blank" rel="noopener" class="btn btn-amazon">${s.btn_amazon}</a>`
-    : '';
+  // Emoji in a styled visual area (Amazon image API no longer available without affiliate account)
+  const imgHtml=`<div class="card-img-wrap"><span class="card-img-emoji">${item.emoji}</span></div>`;
 
-  const searchBtn = `<button class="btn btn-search" onclick="openStoresModal('${item.id}')">${s.btn_search}</button>`;
-
-  const reserveBtn = !isReserved
-    ? `<button class="btn btn-reserve" onclick="openModal('${item.id}')">${s.btn_reserve}</button>`
-    : '';
-
-  const giftUsedBtn = !isReserved && item.can_gift_used
-    ? `<button class="btn btn-gift-used" onclick="openGiftUsedModal('${item.id}')">${s.btn_gift_used}</button>`
-    : '';
-
-  const reservedBadge = isReserved ? `<div class="reserved-badge">${s.reserved_badge}</div>` : '';
-
-  const priceHtml = item.price ? `
-    <div class="card-price${item.category === 'gutschein' ? ' gutschein' : ''}">
-      <span class="price-label">${s.price_label}</span>
-      <span class="price-value">~€${item.price}</span>
-    </div>` : '';
-
-  return `
-    <div class="item-card ${isReserved ? 'reserved' : ''}" data-id="${item.id}">
-      <div class="card-visual ${catClass}">
-        ${item.emoji}
-        ${reservedBadge}
-      </div>
-      <div class="card-body">
-        <div class="card-category">${(STRINGS[lang].category_labels[item.category] || item.category).replace(/^.+?\s/,'')}</div>
-        <div class="card-name">${name}</div>
-        ${desc ? `<div class="card-desc">${desc}</div>` : ''}
-        ${priceHtml}
-        <div class="card-footer">
-          <div class="btn-row">
-            ${amazonBtn}
-            ${searchBtn}
-          </div>
-          ${reserveBtn}
-          ${giftUsedBtn}
-        </div>
-      </div>
-    </div>`;
+  return `<div class="item-card ${ir?'reserved':''} cat-${item.category}" data-id="${item.id}">
+    <div class="card-strip"></div>
+    ${imgHtml}
+    <div class="card-top" style="padding-top:10px"><span style="font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint)">${catLabel}</span>${badge}</div>
+    <div class="card-body" style="padding-top:2px">
+      <div class="card-name">${name}</div>
+      ${desc?`<div class="card-desc">${desc}</div>`:''}
+      ${price}
+      <div class="card-footer"><div class="btn-row">${amazonBtn}${searchBtn}</div>${reserveBtn}${giftBtn}</div>
+    </div></div>`;
 }
 
-// ─── FILTER ───
-function filterCategory(f) {
-  currentFilter = f;
-  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+function filterCategory(f){
+  currentFilter=f;
+  document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById(`tab-${f}`).classList.add('active');
   renderContent();
 }
 
-// ─── OTHER STORES MODAL ───
-function openStoresModal(id) {
-  const item = allItems.find(i => i.id === id);
-  if (!item) return;
-  const s = STRINGS[lang];
-  const name = lang === 'de' ? item.name_de : item.name;
-  const query = encodeURIComponent(item.search_query || name);
-
-  document.getElementById('modal-stores-title').textContent =
-    typeof s.modal_stores_title === 'function' ? s.modal_stores_title(name) : s.modal_stores_title;
-  document.getElementById('stores-note').textContent = s.modal_stores_note;
-
-  const list = document.getElementById('stores-list');
-  list.innerHTML = s.stores.map(store => `
-    <a href="${store.url}${query}" target="_blank" rel="noopener" class="store-link">
-      <span>${store.icon} ${store.name}</span>
-      <span class="store-arrow">→</span>
-    </a>`).join('');
-
+function openStoresModal(id){
+  const item=allItems.find(i=>i.id===id);if(!item)return;
+  const s=STRINGS[lang],name=lang==='de'?item.name_de:item.name,q=encodeURIComponent(item.search_query||name);
+  document.getElementById('modal-stores-title').textContent=typeof s.modal_stores_title==='function'?s.modal_stores_title(name):s.modal_stores_title;
+  document.getElementById('stores-note').textContent=s.modal_stores_note;
+  document.getElementById('stores-list').innerHTML=s.stores.map(st=>`<a href="${st.url}${q}" target="_blank" rel="noopener" class="store-link"><span>${st.icon} ${st.name}</span><span class="store-arrow">→</span></a>`).join('');
   document.getElementById('modal-stores').classList.add('open');
 }
-function closeModalStoresBtn() {
-  document.getElementById('modal-stores').classList.remove('open');
-}
-function closeModalStores(e) {
-  if (e.target.id === 'modal-stores') closeModalStoresBtn();
-}
+function closeModalStoresBtn(){document.getElementById('modal-stores').classList.remove('open')}
+function closeModalStores(e){if(e.target.id==='modal-stores')closeModalStoresBtn()}
 
-// ─── GIFT USED MODAL ───
-function openGiftUsedModal(id) {
-  pendingReserveId = id;
-  const s = STRINGS[lang];
-  document.getElementById('modal-used-title').textContent = s.modal_gift_used_title;
-  document.getElementById('modal-used-desc').textContent = s.modal_gift_used_desc;
-  // Update WhatsApp link
-  const waNum = CONFIG.WHATSAPP;
-  const item = allItems.find(i => i.id === id);
-  const itemName = item ? (lang === 'de' ? item.name_de : item.name) : '';
-  const waMsg = encodeURIComponent(`Hi! I'd like to gift you a second-hand "${itemName}" for your baby registry 🎁`);
-  const waLink = document.getElementById('modal-used-whatsapp');
-  if (waNum && waNum !== 'YOUR_WHATSAPP_NUMBER') {
-    waLink.href = `https://wa.me/${waNum}?text=${waMsg}`;
-    waLink.textContent = `+${waNum}`;
-    document.getElementById('modal-used-hint').style.display = 'none';
-  } else {
-    waLink.textContent = 'Configure in CONFIG.WHATSAPP';
-    waLink.href = '#';
-  }
+function openGiftUsedModal(id){
+  pendingReserveId=id;
   document.getElementById('modal-used').classList.add('open');
 }
-function closeModalUsedBtn() {
-  document.getElementById('modal-used').classList.remove('open');
-}
-function closeModalUsed(e) {
-  if (e.target.id === 'modal-used') closeModalUsedBtn();
-}
-function openModal(id) {
-  pendingReserveId = id;
-  document.getElementById('modal').classList.add('open');
-}
-function closeModalBtn() {
-  document.getElementById('modal').classList.remove('open');
-  pendingReserveId = null;
-}
-function closeModal(e) {
-  if (e.target.id === 'modal') closeModalBtn();
-}
+function closeModalUsedBtn(){document.getElementById('modal-used').classList.remove('open')}
+function closeModalUsed(e){if(e.target.id==='modal-used')closeModalUsedBtn()}
 
-async function confirmReserve() {
-  if (!pendingReserveId) return;
-  const item = allItems.find(i => i.id === pendingReserveId);
-  if (!item) return;
-
-  item.reserved = true;
-  closeModalBtn();
+async function confirmGiftUsed(){
+  if(!pendingReserveId) return;
+  const item=allItems.find(i=>i.id===pendingReserveId);
+  if(!item) return;
+  const name=(document.getElementById('gifter-used-name')||{}).value||'';
+  const msg=(document.getElementById('gifter-used-msg')||{}).value||'';
+  item.reserved=true;
+  closeModalUsedBtn();
   updateStats();
   renderContent();
   showToast(t('toast_reserved'));
-
-  // If Google Sheet is configured, update via Apps Script webhook
-  if (CONFIG.SHEET_URL !== 'YOUR_GOOGLE_SHEETS_CSV_URL_HERE' && CONFIG.WEBHOOK_URL) {
-    try {
-      await fetch(CONFIG.WEBHOOK_URL, {
-        method: 'POST',
-        body: JSON.stringify({ id: pendingReserveId, reserved: true }),
-        headers: { 'Content-Type': 'application/json' }
-      });
-    } catch(e) { /* silent fail — sheet update is optional */ }
-  }
-}
-
-// ─── GUTSCHEIN / PAYMENT ───
-let selectedAmount = null;
-
-function selectAmount(amt) {
-  selectedAmount = amt;
-  document.getElementById('custom-amount').value = amt;
-  document.querySelectorAll('.amount-btn').forEach(b => {
-    b.classList.toggle('active', parseInt(b.textContent.replace('€','')) === amt);
+  // Send silent email notification
+  await sendEmailNotification({
+    type: '♻️ Second-Hand Gift Offered',
+    item: lang==='de'?item.name_de:item.name,
+    name: name||'(not provided)',
+    message: msg||'(no message)',
+    kind: 'second-hand / used',
   });
-  updateBankAmount();
-}
-
-function syncAmount(val) {
-  selectedAmount = val || null;
-  document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
-  updateBankAmount();
-}
-
-function updateBankAmount() {
-  const amt = document.getElementById('custom-amount').value || selectedAmount;
-  const el = document.getElementById('bank-amount');
-  if (el) el.textContent = amt ? `€${amt}` : '—';
-}
-
-function switchTab(tab, btn) {
-  document.querySelectorAll('.pay-tab').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.pay-panel').forEach(p => p.classList.add('hidden'));
-  btn.classList.add('active');
-  document.getElementById(`panel-${tab}`).classList.remove('hidden');
-}
-
-function sendPaypal(e) {
-  e.preventDefault();
-  const amt = document.getElementById('custom-amount').value || selectedAmount;
-  if (!amt || amt < 1) { showToast('Please enter an amount first 🙏'); return; }
-  window.open(`${CONFIG.PAYPAL_ME}/${amt}EUR`, '_blank');
-}
-
-function copyIBAN() {
-  const iban = CONFIG.BANK.iban.replace(/\s/g, '');
-  navigator.clipboard.writeText(iban).then(() => {
-    const btn = document.getElementById('copy-btn');
-    btn.textContent = '✓ Copied!';
-    setTimeout(() => btn.textContent = 'Copy', 2000);
+  ['gifter-used-name','gifter-used-msg'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value='';
   });
 }
 
-function initPaymentSection() {
-  const b = CONFIG.BANK;
-  if (b && b.iban) {
-    document.getElementById('iban-name').textContent = b.name;
-    document.getElementById('iban-val').textContent  = b.iban;
-    document.getElementById('iban-bic').textContent  = b.bic;
-    document.getElementById('iban-bank').textContent = b.bank;
+function openModal(id){pendingReserveId=id;document.getElementById('modal').classList.add('open')}
+function closeModalBtn(){document.getElementById('modal').classList.remove('open');pendingReserveId=null}
+function closeModal(e){if(e.target.id==='modal')closeModalBtn()}
+async function confirmReserve(){
+  if(!pendingReserveId)return;
+  const item=allItems.find(i=>i.id===pendingReserveId);if(!item)return;
+  const gifterName=(document.getElementById('gifter-name')||{}).value||'';
+  const gifterMsg=(document.getElementById('gifter-msg')||{}).value||'';
+  item.reserved=true;
+  closeModalBtn();updateStats();renderContent();showToast(t('toast_reserved'));
+  // Send silent email notification
+  await sendEmailNotification({
+    type: '🎁 New Gift Reserved',
+    item: lang==='de'?item.name_de:item.name,
+    name: gifterName||'(not provided)',
+    message: gifterMsg||'(no message)',
+    kind: 'new or other store',
+  });
+  ['gifter-name','gifter-msg'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+}
+
+let selectedAmount=null;
+function selectAmount(amt){
+  selectedAmount=amt;document.getElementById('custom-amount').value=amt;
+  document.querySelectorAll('.amount-btn').forEach(b=>b.classList.toggle('active',parseInt(b.textContent.replace('€',''))===amt));
+  updateBankAmount();
+}
+function syncAmount(v){selectedAmount=v||null;document.querySelectorAll('.amount-btn').forEach(b=>b.classList.remove('active'));updateBankAmount()}
+function updateBankAmount(){const el=document.getElementById('bank-amount'),v=document.getElementById('custom-amount').value||selectedAmount;if(el)el.textContent=v?`€${v}`:'—'}
+// payment tabs removed — both options shown simultaneously
+function sendPaypal(e){
+  e.preventDefault();const amt=document.getElementById('custom-amount').value||selectedAmount;
+  if(!amt||amt<1){showToast('Please enter an amount first 🙏');return;}
+  window.open(`${CONFIG.PAYPAL_ME}/${amt}EUR`,'_blank');
+}
+function copyIBAN(){
+  navigator.clipboard.writeText(CONFIG.BANK.iban.replace(/\s/g,'')).then(()=>{
+    const b=document.getElementById('copy-btn');b.textContent='✓ Copied!';setTimeout(()=>b.textContent='Copy',2000);
+  });
+}
+function initPaymentSection(){
+  const b=CONFIG.BANK;
+  const bankPanel=document.getElementById('panel-bank');
+  if(b&&b.iban&&!b.iban.includes('DE00')){
+    document.getElementById('iban-name').textContent=b.name;
+    document.getElementById('iban-val').textContent=b.iban;
+    document.getElementById('iban-bic').textContent=b.bic;
+    document.getElementById('iban-bank').textContent=b.bank;
   } else {
-    // hide bank tab if no IBAN configured
-    const t = document.getElementById('tab-bank');
-    if (t) t.style.display = 'none';
+    if(bankPanel) bankPanel.style.display='none';
+    const div=document.querySelector('.pay-divider');
+    if(div) div.style.display='none';
   }
 }
 
-// ─── TOAST ───
-function showToast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 3200);
-}
+function showToast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),3200)}
 
-// ─── DEMO DATA (shown when sheet not configured) ───
-const DEMO_ITEMS = [
-  { id:'1', name:'Newborn Bodysuits Set', name_de:'Neugeborenen-Body-Set', category:'clothing', emoji:'👶', price:'25', priority:'high', description:'Pack of 5, sizes 50-62', description_de:'5er-Pack, Größen 50-62', amazon_url:'https://amazon.de/s?k=neugeborenen+body+set', search_query:'Neugeborenen Body Set 50 62', reserved:false, can_gift_used:true },
-  { id:'2', name:'Baby Sleeping Bag 70cm', name_de:'Babyschlafsack 70cm', category:'sleeping', emoji:'😴', price:'35', priority:'high', description:'TOG 1.5, suitable for year-round', description_de:'TOG 1.5, ganzjährig geeignet', amazon_url:'https://amazon.de/s?k=babyschlafsack+70cm', search_query:'Babyschlafsack 70cm TOG 1.5', reserved:false, can_gift_used:true },
-  { id:'3', name:'Baby Monitor', name_de:'Babyphone', category:'sleeping', emoji:'📹', price:'60', priority:'medium', description:'Audio monitor with night light', description_de:'Audio-Babyphone mit Nachtlicht', amazon_url:'https://amazon.de/s?k=babyphone', search_query:'Babyphone Audio', reserved:true, can_gift_used:true },
-  { id:'4', name:'Breast Pump', name_de:'Milchpumpe', category:'feeding', emoji:'🍼', price:'80', priority:'high', description:'Electric, single or double', description_de:'Elektrisch, einfach oder doppelt', amazon_url:'https://amazon.de/s?k=milchpumpe+elektrisch', search_query:'Milchpumpe elektrisch', reserved:false, can_gift_used:false },
-  { id:'5', name:'Stroller Rain Cover', name_de:'Kinderwagen-Regenabdeckung', category:'mobility', emoji:'🌧️', price:'20', priority:'low', description:'Universal fit', description_de:'Universalgröße', amazon_url:'https://amazon.de/s?k=kinderwagen+regenabdeckung', search_query:'Kinderwagen Regenabdeckung universal', reserved:false, can_gift_used:true },
-  { id:'6', name:'Baby Bathtub', name_de:'Babybadewanne', category:'bath', emoji:'🛁', price:'30', priority:'medium', description:'With temperature indicator', description_de:'Mit Temperaturanzeige', amazon_url:'https://amazon.de/s?k=babybadewanne', search_query:'Babybadewanne Temperaturanzeige', reserved:false, can_gift_used:true },
-  { id:'7', name:'Soft Toy Set', name_de:'Kuscheltier-Set', category:'play', emoji:'🧸', price:'25', priority:'low', description:'Sensory toys for newborns', description_de:'Sensorisches Spielzeug für Neugeborene', amazon_url:'https://amazon.de/s?k=babyspielzeug+sensorisch', search_query:'Sensorisches Babyspielzeug Neugeborene', reserved:false, can_gift_used:false },
+// ─── EMAIL NOTIFICATION ───────────────────────────────────────────────
+// Sends a silent background email via EmailJS when someone reserves or offers a gift.
+// The user never sees this — it runs in the background after they click confirm.
+async function sendEmailNotification({type, item, name, message, kind}){
+  const E = CONFIG.EMAIL;
+  // Skip if EmailJS not configured yet
+  if(!E || !E.service_id || E.service_id === 'YOUR_EMAILJS_SERVICE_ID') return;
+  try {
+    emailjs.init(E.public_key);
+    await emailjs.send(E.service_id, E.template_id, {
+      to_email:    E.to_email,
+      from_name:   'Baby Registry 🌿',
+      subject:     `${type}: ${item}`,
+      gifter_name: name,
+      item_name:   item,
+      gift_kind:   kind,
+      message:     message,
+      registry_url: window.location.href,
+    });
+    console.log('✓ Email notification sent');
+  } catch(err) {
+    // Silent fail — guest experience is not affected
+    console.warn('Email notification failed:', err);
+  }
+}
+// ─────────────────────────────────────────────────────────────────────
+
+const DEMO_ITEMS=[
+  {id:'1',name:'Baby Wipes',name_de:'Pampers Sensitive Feuchttücher',category:'bath',emoji:'🧻',price:'20',priority:'high',description:'Pampers Sensitive, 1200 Stück, parfümfrei',description_de:'Pampers Sensitive, 1200 Stück, parfümfrei',amazon_url:'https://www.amazon.de/s?k=pampers+sensitive',search_query:'Pampers Sensitive Feuchttücher',reserved:false,can_gift_used:false},
+  {id:'2',name:'Baby Changing Backpack',name_de:'LÄSSIG Wickelrucksack',category:'other',emoji:'🎒',price:'100',priority:'high',description:'LÄSSIG Vividal, mit Wickelunterlage & Kinderwagenbefestigung',description_de:'LÄSSIG Vividal, mit Wickelunterlage & Kinderwagenbefestigung',amazon_url:'https://www.amazon.de/s?k=lässig+wickelrucksack',search_query:'LÄSSIG Wickelrucksack',reserved:false,can_gift_used:true},
+  {id:'3',name:'Baby Sleeping Bag TOG 2.5',name_de:'Babyschlafsack Winter TOG 2.5',category:'sleeping',emoji:'😴',price:'36',priority:'medium',description:'Julius Zöllner, OEKO-TEX, Gr. 50–70 cm',description_de:'Julius Zöllner, OEKO-TEX, Gr. 50–70 cm',amazon_url:'https://www.amazon.de/s?k=babyschlafsack',search_query:'Babyschlafsack Winter TOG 2.5',reserved:true,can_gift_used:true},
+  {id:'4',name:'Nursing Pillow',name_de:'Stillkissen',category:'feeding',emoji:'🤱',price:'30',priority:'high',description:'Niimo Stillhörnchen, ergonomisch, waschbarer Bezug',description_de:'Niimo Stillhörnchen, ergonomisch, waschbarer Bezug',amazon_url:'https://www.amazon.de/s?k=stillkissen',search_query:'Stillkissen ergonomisch',reserved:false,can_gift_used:true},
+  {id:'5',name:'Baby Bathtub',name_de:'Babybadewanne',category:'bath',emoji:'🛁',price:'30',priority:'medium',description:'Rutschfester Boden, 0–12 Monate',description_de:'Rutschfester Boden, 0–12 Monate',amazon_url:'https://www.amazon.de/s?k=babybadewanne',search_query:'Babybadewanne Neugeborene',reserved:false,can_gift_used:true},
+  {id:'6',name:'Activity Play Mat',name_de:'Krabbeldecke Spieldecke',category:'play',emoji:'🎮',price:'60',priority:'low',description:'Blissful Diary blattförmig, 150×130 cm, Haferflockenbeige',description_de:'Blissful Diary blattförmig, 150×130 cm, Haferflockenbeige',amazon_url:'https://www.amazon.de/s?k=krabbeldecke',search_query:'Krabbeldecke Spieldecke groß',reserved:false,can_gift_used:true},
 ];
 
-// ─── INIT ───
 applyStrings();
 loadRegistry();
 initPaymentSection();
