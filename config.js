@@ -46,7 +46,7 @@ const CONFIG = {
   // ── Google Apps Script URL (auto-reserve) ─────────────────────────
   // After deploying the Apps Script, paste the Web App URL here.
   // See APPS_SCRIPT_SETUP.md for instructions.
-  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbydsVLOILr6jTtcDxeeveHEY1NwA1vCeK2dv0KEhztSRWLPV2jy24VF4FFYDX79botELw/exec',
+  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxz64I-hltQ1JbtLZt_fZgGdBZrCSiAFvL-VX2n8KtEvVNLhte2ripBqWcFazhjJFwjhA/exec',
 
   // ── Column order in your Google Sheet (do not change) ──────────
   COLS: {
