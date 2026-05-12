@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════
 //  Baby Registry — Configuration
 //  Edit ONLY this file. Never need to touch index.html again.
-//  Elida 003
+//  Elida 004
 // ═══════════════════════════════════════════════════════════════════
 
 const CONFIG = {
@@ -50,7 +50,7 @@ const CONFIG = {
   // ── Google Apps Script URL (auto-reserve) ─────────────────────────
   // After deploying the Apps Script, paste the Web App URL here.
   // See APPS_SCRIPT_SETUP.md for instructions.
-  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwUZ1yUYvyWzuzbw2OOsXaA0rZFjO2YO4KuiwCcg376pJPlkUI0-Qy0aQyTmnov71_dBg/exec',
+  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbzAtNEXcr5sMTK9qptpNq53aU9YR25O095ingyEzJSfwLaHeTzjLLqdNpdhJQ_ctiNL2g/exec',
 
 
   // ── Column order in your Google Sheet (do not change) ──────────
@@ -60,7 +60,9 @@ const CONFIG = {
   COLS: {
     id:0, name:1, name_de:2, category:3, emoji:4,
     price:5, priority:6, description:7, description_de:8,
-    amazon_url:9, search_query:10, reserved:11, gifter_name:12, can_gift_used:13, store_name:14, store_url:15
+    amazon_url:9, search_query:10, reserved:11, gifter_name:12,
+    can_gift_used:13, store_name:14, store_url:15
   }
+
 
 };

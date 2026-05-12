@@ -654,8 +654,8 @@ function parseCSV(text){
       amazon_url:sanitizeUrl(c[C.amazon_url]),search_query:c[C.search_query]||c[C.name],
       reserved:(c[C.reserved]||'').toLowerCase()==='true'||(c[C.reserved]||'')==='1',
       can_gift_used:(c[C.can_gift_used]||'').toLowerCase()==='true'||(c[C.can_gift_used]||'')==='1',
-      store_name:c[13]||'',
-      store_url:c[14]||''};
+      store_name:c[14]||'',
+      store_url:c[15]||''};
   }).filter(i=>i.id);
 }
 
