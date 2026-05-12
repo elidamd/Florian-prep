@@ -963,34 +963,51 @@ async function runAppsScriptReserveTest(){
     s.innerHTML = '❌ APPS_SCRIPT_URL not set in config.js'; s.style.color='#e07070'; return;
   }
 
-  s.innerHTML = '⏳ Sending POST to reserve item id=1 (test)…';
+  // Show the exact URL being called so we can verify it
+  s.innerHTML = '⏳ POSTing to:<br><span style="font-size:.68rem;opacity:.6;word-break:break-all">' + url + '</span>';
+
   try {
     const res = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: '1', gifter_name: 'Debug Test' })
     });
+
+    // Show HTTP status
+    const httpStatus = res.status + ' ' + res.statusText;
     const text = await res.text();
     let json;
     try { json = JSON.parse(text); } catch(e){ json = null; }
 
+    // Log full raw response to console for detailed debugging
+    console.log('Apps Script raw response:', text);
+
     if(json && json.success){
-      s.innerHTML = '✅ <strong>POST worked! Check your Google Sheet — row 1 should now show "true" in the reserved column.</strong><br><span style="opacity:.6">Response: ' + JSON.stringify(json) + '</span>';
+      s.innerHTML = '✅ <strong>Working!</strong> Check sheet — id=1 should be "true".<br><span style="opacity:.5">HTTP: ' + httpStatus + '</span>';
       s.style.color = '#8BAF8E';
     } else if(json && json.already_reserved){
-      s.innerHTML = '✅ <strong>POST reached the script!</strong><br>Item id=1 was already reserved from a previous test.<br><span style="opacity:.6">The connection is working correctly.</span>';
+      s.innerHTML = '✅ <strong>Connection works!</strong> Item already reserved from earlier test.<br>Set cell back to false to test again.<br><span style="opacity:.5">HTTP: ' + httpStatus + '</span>';
       s.style.color = '#8BAF8E';
     } else if(json && json.error){
-      s.innerHTML = '⚠️ <strong>Script responded with error:</strong><br>' + json.error + '<br><br>Check the SHEET_NAME and column numbers in google_apps_script.js match your actual sheet.';
+      s.innerHTML = '⚠️ Script error: <strong>' + json.error + '</strong><br><span style="opacity:.5">HTTP: ' + httpStatus + '</span><br><br>Fix: check SHEET_NAME and column numbers in Apps Script.';
       s.style.color = '#e0c070';
+    } else if(text.includes('<!DOCTYPE') || text.includes('<html')){
+      s.innerHTML = '❌ <strong>Got HTML instead of JSON</strong> (HTTP ' + httpStatus + ')<br><br>This means the URL is wrong or the script is not deployed.<br><br>Fix: In Apps Script → Deploy → Manage deployments → copy the URL again. It must end in <strong>/exec</strong>';
+      s.style.color = '#e07070';
     } else {
-      s.innerHTML = '⚠️ Unexpected response:<br>' + text.substring(0,300) + '<br><br>If you see HTML, the script may not be deployed correctly. Try redeploying as a <strong>new version</strong>.';
+      s.innerHTML = '⚠️ Unexpected response (HTTP ' + httpStatus + '):<br><span style="font-size:.7rem">' + text.substring(0,200) + '</span>';
       s.style.color = '#e0c070';
     }
   } catch(err){
-    s.innerHTML = '❌ <strong>POST failed:</strong> ' + err.message + '<br><br>Common causes:<br>• "Who has access" not set to <strong>Anyone</strong><br>• Not redeployed after last code change<br>• URL copied incorrectly (must end in /exec)';
+    // A fetch() exception almost always means CORS
+    s.innerHTML = '❌ <strong>CORS block or network error</strong><br><em>' + err.message + '</em><br><br>' +
+      '<strong>Most likely fix:</strong><br>' +
+      '1. In Apps Script → Deploy → Manage deployments<br>' +
+      '2. Click ✏️ edit → check <strong>"Who has access" = Anyone</strong><br>' +
+      '3. If it already says Anyone: save a new version and redeploy<br>' +
+      '4. Copy the NEW URL into config.js';
     s.style.color = '#e07070';
-    console.error('Apps Script POST error:', err);
+    console.error('Fetch error (full):', err);
   }
 }
 // ─────────────────────────────────────────────────────────────────────

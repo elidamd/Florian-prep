@@ -1,6 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════
 //  Baby Registry — Configuration
 //  Edit ONLY this file. Never need to touch index.html again.
+//  Elida 000
 // ═══════════════════════════════════════════════════════════════════
 
 const CONFIG = {
