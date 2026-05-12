@@ -60,8 +60,7 @@ const CONFIG = {
   COLS: {
     id:0, name:1, name_de:2, category:3, emoji:4,
     price:5, priority:6, description:7, description_de:8,
-    amazon_url:9, search_query:10, reserved:11, can_gift_used:12,
-    col 13 = store_name (optional), col 14 = store_url (optional)
+    amazon_url:9, search_query:10, reserved:11, can_gift_used:12, store_name:13, store_url:14
   }
 
 };
