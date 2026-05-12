@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════
 //  Baby Registry — Configuration
 //  Edit ONLY this file. Never need to touch index.html again.
-//  Elida 004
+//  Elida 005
 // ═══════════════════════════════════════════════════════════════════
 
 const CONFIG = {
@@ -31,9 +31,9 @@ const CONFIG = {
   EVENT: {
     date:     'Saturday, 30 May 2026',
     time:     '15:30 Uhr',
-    location: 'Your address here',
-    desc_en:  "We're so happy to be surrounded by the people we love. Whether you join us in person or from afar — thank you for being part of this journey.",
-    desc_de:  "Wir freuen uns so sehr, von den Menschen umgeben zu sein, die wir lieben. Ob du persönlich dabei bist oder aus der Ferne — danke, dass du Teil dieser Reise bist.",
+    location: 'Kastanienallee 26 - Hinterhof',
+    desc_en:  "Two mamas, one little one on the way, and a whole lot of love to celebrate. We're bringing a little piece of Brazil to Hamburg with a Festa Junina — and we'd love nothing more than to share it with you.",
+    desc_de:  "Zwei Mamas, ein kleines Wunder unterwegs und ganz viel Liebe zu feiern. Wir bringen ein Stück Brasilien nach Hamburg — mit einer Festa Junina. Und wir würden uns so freuen, das mit euch zu teilen.",
   },
 
 
