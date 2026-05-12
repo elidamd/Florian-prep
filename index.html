@@ -735,12 +735,35 @@ async function confirmGiftUsed(){
   if(!item) return;
   const name=(document.getElementById('gifter-used-name')||{}).value||'';
   const msg=(document.getElementById('gifter-used-msg')||{}).value||'';
+
+  const confirmBtn=document.getElementById('modal-used-confirm');
+  if(confirmBtn){confirmBtn.disabled=true;confirmBtn.textContent='Saving…';}
+
+  const scriptUrl=CONFIG.APPS_SCRIPT_URL;
+  if(scriptUrl && scriptUrl!=='YOUR_APPS_SCRIPT_URL_HERE'){
+    try{
+      const res=await fetch(scriptUrl,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({id:item.id, gifter_name:name})
+      });
+      const json=await res.json();
+      if(json.already_reserved){
+        closeModalUsedBtn();
+        showToast('⚠️ Just taken by someone else — please choose another!');
+        await loadRegistry();
+        return;
+      }
+    }catch(err){
+      console.warn('Apps Script unreachable, marking locally:', err);
+    }
+  }
+
   item.reserved=true;
   closeModalUsedBtn();
   updateStats();
   renderContent();
   showToast(t('toast_reserved'));
-  // Send silent email notification
   await sendEmailNotification({
     type: '♻️ Second-Hand Gift Offered',
     item: lang==='de'?item.name_de:item.name,
@@ -761,9 +784,48 @@ async function confirmReserve(){
   const item=allItems.find(i=>i.id===pendingReserveId);if(!item)return;
   const gifterName=(document.getElementById('gifter-name')||{}).value||'';
   const gifterMsg=(document.getElementById('gifter-msg')||{}).value||'';
+
+  // Disable confirm button to prevent double-click
+  const confirmBtn=document.getElementById('modal-confirm');
+  if(confirmBtn){confirmBtn.disabled=true;confirmBtn.textContent='Saving…';}
+
+  // Try to reserve via Apps Script (real-time, prevents double-booking)
+  const scriptUrl=CONFIG.APPS_SCRIPT_URL;
+  if(scriptUrl && scriptUrl!=='YOUR_APPS_SCRIPT_URL_HERE'){
+    try{
+      const res=await fetch(scriptUrl,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({id:item.id, gifter_name:gifterName})
+      });
+      const json=await res.json();
+
+      if(json.already_reserved){
+        // Someone else just reserved it — tell the user
+        closeModalBtn();
+        showToast('⚠️ Just taken by someone else — please choose another!');
+        // Reload to get fresh data
+        await loadRegistry();
+        return;
+      }
+      if(!json.success){
+        console.warn('Apps Script error:', json.error);
+        // Fall through and mark locally anyway
+      }
+    }catch(err){
+      console.warn('Apps Script unreachable, marking locally:', err);
+      // Fall through — mark locally so UX is not broken
+    }
+  }
+
+  // Mark locally
   item.reserved=true;
-  closeModalBtn();updateStats();renderContent();showToast(t('toast_reserved'));
-  // Send silent email notification
+  closeModalBtn();
+  updateStats();
+  renderContent();
+  showToast(t('toast_reserved'));
+
+  // Send email notification
   await sendEmailNotification({
     type: '🎁 New Gift Reserved',
     item: lang==='de'?item.name_de:item.name,

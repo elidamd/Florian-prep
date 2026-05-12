@@ -42,6 +42,10 @@ const CONFIG = {
     to_email:    'pollyana_ferreiras@hotmail.com',    // where notifications go
   },
 
+  // ── Google Apps Script URL (auto-reserve) ─────────────────────────
+  // After deploying the Apps Script, paste the Web App URL here.
+  // See APPS_SCRIPT_SETUP.md for instructions.
+  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwOZ3vQh2zqFwb7EaBBJdmR7au33LHYladP6Z8MWlzfUZ9GWVSTL3DiKrvSCU5ZumcHFw/exec',
 
   // ── Column order in your Google Sheet (do not change) ──────────
   COLS: {
