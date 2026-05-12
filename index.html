@@ -905,54 +905,6 @@ applyStrings();
 loadRegistry();
 initPaymentSection();
 
-// ── EMAIL TEST FUNCTION (remove after testing) ──────────────────────
-async function runEmailTest(){
-  const status = document.getElementById('email-test-status');
-  const E = CONFIG.EMAIL;
-  status.style.color = 'rgba(245,240,232,.7)';
-
-  // Step 1: check config
-  if(!E || !E.service_id || E.service_id === 'YOUR_EMAILJS_SERVICE_ID'){
-    status.innerHTML = '❌ <strong>CONFIG not filled in.</strong><br>Open index.html and paste your EmailJS service_id, template_id, public_key, and to_email into the CONFIG.EMAIL block.';
-    status.style.color = '#e07070';
-    return;
-  }
-  status.innerHTML = '⏳ Initialising EmailJS…';
-
-  try {
-    emailjs.init(E.public_key);
-    status.innerHTML = '⏳ Sending test email to <strong>' + E.to_email + '</strong>…';
-
-    const result = await emailjs.send(E.service_id, E.template_id, {
-      to_email:    E.to_email,
-      from_name:   'Baby Registry 🌿 (test)',
-      subject:     '🧪 Test: Baby Registry Email is working!',
-      gifter_name: 'Test Guest',
-      item_name:   'Baby Sleeping Bag (TEST)',
-      gift_kind:   'test',
-      message:     'This is a test message from your baby registry website.',
-      registry_url: window.location.href,
-    });
-
-    status.innerHTML = '✅ <strong>Email sent! Check your inbox.</strong><br>Status: ' + result.status + ' ' + result.text + '<br><span style="opacity:.6">If not in inbox, check spam.</span>';
-    status.style.color = '#8BAF8E';
-
-  } catch(err) {
-    status.style.color = '#e07070';
-    // Give a helpful message per error type
-    if(typeof err === 'object' && err.text){
-      if(err.status === 400) status.innerHTML = '❌ <strong>Bad request (400)</strong><br>Your <code>template_id</code> or <code>service_id</code> is wrong. Check them in the EmailJS dashboard.';
-      else if(err.status === 401) status.innerHTML = '❌ <strong>Unauthorised (401)</strong><br>Your <code>public_key</code> is wrong. Copy it from EmailJS → Account → General.';
-      else if(err.status === 403) status.innerHTML = '❌ <strong>Forbidden (403)</strong><br>Your EmailJS account may be blocked or domain not whitelisted. Check EmailJS dashboard.';
-      else if(err.status === 422) status.innerHTML = '❌ <strong>Template error (422)</strong><br>A variable in your EmailJS template does not match what the code sends. Check the template uses <code>{{to_email}}</code>, <code>{{subject}}</code>, <code>{{gifter_name}}</code>, <code>{{message}}</code>.';
-      else status.innerHTML = '❌ Error ' + err.status + ': ' + err.text;
-    } else {
-      status.innerHTML = '❌ <strong>Network or script error</strong><br>' + (err.message || JSON.stringify(err)) + '<br><span style="opacity:.6">Check your internet connection and that the EmailJS script loaded.</span>';
-    }
-    console.error('EmailJS test error:', err);
-  }
-}
-// ────────────────────────────────────────────────────────────────────
 </script>
 </body>
 </html>
