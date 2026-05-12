@@ -333,7 +333,7 @@ footer{text-align:center;padding:32px 16px;font-size:.72rem;color:var(--ink-fain
 <div class="notice-wrap">
   <div class="notice">
     <span class="notice-icon">💡</span>
-    <span id="notice-text">We put together our wish list on Amazon to make it easy — but we want to offer you more options. By purchasing through the <strong>Amazon link</strong>, the gift is sent directly to our home. For any remaining items, we also receive a <strong>discount on our next purchase</strong>. Each card has an <strong>Other Stores</strong> button if you prefer shopping elsewhere.</span>
+    <span id="notice-text">We put together our wish list on Amazon to make it easy — but we want to offer you more options. By purchasing through the <a id="notice-amazon-link" href="#" target="_blank" rel="noopener" style="color:var(--sage-deep);font-weight:600;text-decoration:none">Amazon Wish List</a>, the gift is sent directly to our home. For any remaining items, we also receive a <strong>discount on our next purchase</strong>. Each card has an <strong>Other Stores</strong> button if you prefer shopping elsewhere.</span>
   </div>
 </div>
 
@@ -502,9 +502,9 @@ const STRINGS = {
       {name:'dm Online Shop',url:'https://www.dm.de/search?query=',icon:'🔵'},
       {name:'Rossmann Online',url:'https://www.rossmann.de/de/search/?q=',icon:'🔴'},
       {name:'Otto.de',url:'https://www.otto.de/suche/',icon:'🟠'},
-      {name:'Babymarkt.de',url:'https://www.babymarkt.de/search/?q=',icon:'🟢'},
+      {name:'Babymarkt.de',url:'https://www.babymarkt.de/suche/?q=',icon:'🟢'},
       {name:'Vinted (2nd hand)',url:'https://www.vinted.de/catalog?search_text=',icon:'♻️'},
-      {name:'eBay Kleinanzeigen',url:'https://www.kleinanzeigen.de/s/',icon:'🟡'},
+{name:'eBay Kleinanzeigen',url:'https://www.kleinanzeigen.de/s-',suffix:'/k0',icon:'🟡'},
     ],
     reserved_badge:'Reserved',
     gutschein_title:'🎁 Send a Gutschein',
@@ -550,9 +550,9 @@ const STRINGS = {
       {name:'dm Online Shop',url:'https://www.dm.de/search?query=',icon:'🔵'},
       {name:'Rossmann Online',url:'https://www.rossmann.de/de/search/?q=',icon:'🔴'},
       {name:'Otto.de',url:'https://www.otto.de/suche/',icon:'🟠'},
-      {name:'Babymarkt.de',url:'https://www.babymarkt.de/search/?q=',icon:'🟢'},
+      {name:'Babymarkt.de',url:'https://www.babymarkt.de/suche/?q=',icon:'🟢'},
       {name:'Vinted (2nd Hand)',url:'https://www.vinted.de/catalog?search_text=',icon:'♻️'},
-      {name:'eBay Kleinanzeigen',url:'https://www.kleinanzeigen.de/s/',icon:'🟡'},
+{name:'eBay Kleinanzeigen',url:'https://www.kleinanzeigen.de/s-',suffix:'/k0',icon:'🟡'},
     ],
     reserved_badge:'Reserviert',
     gutschein_title:'🎁 Gutschein senden',
@@ -616,6 +616,11 @@ function applyStrings(){
   if(s.modal_name_label) document.getElementById('modal-name-label').textContent=s.modal_name_label;
   if(s.modal_msg_label)  document.getElementById('modal-msg-label').textContent=s.modal_msg_label;
   document.getElementById('footer-text').textContent=s.footer;
+  // Set Amazon wish list link in notice
+  const amazonNoticeLink=document.getElementById('notice-amazon-link');
+  if(amazonNoticeLink && CONFIG.AMAZON_WISHLIST_URL && CONFIG.AMAZON_WISHLIST_URL!=='YOUR_AMAZON_WISHLIST_URL'){
+    amazonNoticeLink.href=CONFIG.AMAZON_WISHLIST_URL;
+  }
   // Gift used modal
   const muTitle=document.getElementById('modal-used-title');
   const muDesc=document.getElementById('modal-used-desc');
@@ -648,7 +653,9 @@ function parseCSV(text){
       description_de:c[C.description_de]||c[C.description]||'',
       amazon_url:sanitizeUrl(c[C.amazon_url]),search_query:c[C.search_query]||c[C.name],
       reserved:(c[C.reserved]||'').toLowerCase()==='true'||(c[C.reserved]||'')==='1',
-      can_gift_used:(c[C.can_gift_used]||'').toLowerCase()==='true'||(c[C.can_gift_used]||'')==='1'};
+      can_gift_used:(c[C.can_gift_used]||'').toLowerCase()==='true'||(c[C.can_gift_used]||'')==='1',
+      store_name:c[13]||'',
+      store_url:c[14]||''};
   }).filter(i=>i.id);
 }
 
@@ -691,7 +698,13 @@ function renderCard(item){
   const name=lang==='de'?item.name_de:item.name;
   const desc=lang==='de'?item.description_de:item.description;
   const ir=item.reserved;
-  const amazonBtn=item.amazon_url?`<a href="${item.amazon_url}" target="_blank" rel="noopener" class="btn btn-amazon">${s.btn_amazon}</a>`:'';
+  // Use custom store button if defined in sheet, otherwise Amazon
+  const primaryBtn = item.store_url
+    ? `<a href="${item.store_url}" target="_blank" rel="noopener" class="btn btn-amazon">🏪 ${item.store_name||'Buy'}</a>`
+    : item.amazon_url
+      ? `<a href="${item.amazon_url}" target="_blank" rel="noopener" class="btn btn-amazon">${s.btn_amazon}</a>`
+      : '';
+  const amazonBtn = primaryBtn;
   const searchBtn=`<button class="btn btn-search" onclick="openStoresModal('${item.id}')">${s.btn_search}</button>`;
   const reserveBtn=!ir?`<button class="btn btn-reserve" onclick="openModal('${item.id}')">${s.btn_reserve}</button>`:'';
   const giftBtn=!ir&&item.can_gift_used?`<button class="btn btn-gift-used" onclick="openGiftUsedModal('${item.id}')">${s.btn_gift_used}</button>`:'';
@@ -723,10 +736,20 @@ function filterCategory(f){
 
 function openStoresModal(id){
   const item=allItems.find(i=>i.id===id);if(!item)return;
-  const s=STRINGS[lang],name=lang==='de'?item.name_de:item.name,q=encodeURIComponent(item.search_query||name);
+  const s=STRINGS[lang],name=lang==='de'?item.name_de:item.name;
+  const q=encodeURIComponent(item.search_query||name);
   document.getElementById('modal-stores-title').textContent=typeof s.modal_stores_title==='function'?s.modal_stores_title(name):s.modal_stores_title;
   document.getElementById('stores-note').textContent=s.modal_stores_note;
-  document.getElementById('stores-list').innerHTML=s.stores.map(st=>`<a href="${st.url}${q}" target="_blank" rel="noopener" class="store-link"><span>${st.icon} ${st.name}</span><span class="store-arrow">→</span></a>`).join('');
+  // Build store list — suffix support for eBay format, plus custom store from sheet
+  let storeLinks=s.stores.map(st=>{
+    const href=st.url+q+(st.suffix||'');
+    return `<a href="${href}" target="_blank" rel="noopener" class="store-link"><span>${st.icon} ${st.name}</span><span class="store-arrow">→</span></a>`;
+  });
+  // If sheet has a custom store defined, prepend it at the top
+  if(item.store_name && item.store_url){
+    storeLinks.unshift(`<a href="${item.store_url}" target="_blank" rel="noopener" class="store-link" style="border-color:var(--sage);background:var(--sage-pale)"><span>🏪 ${item.store_name} <span style="font-size:.68rem;color:var(--sage-deep);font-weight:600">RECOMMENDED</span></span><span class="store-arrow">→</span></a>`);
+  }
+  document.getElementById('stores-list').innerHTML=storeLinks.join('');
   document.getElementById('modal-stores').classList.add('open');
 }
 function closeModalStoresBtn(){document.getElementById('modal-stores').classList.remove('open')}
@@ -752,18 +775,12 @@ async function confirmGiftUsed(){
   const scriptUrl=CONFIG.APPS_SCRIPT_URL;
   if(scriptUrl && scriptUrl!=='YOUR_APPS_SCRIPT_URL_HERE'){
     try{
-      const res=await fetch(scriptUrl,{
+      await fetch(scriptUrl,{
         method:'POST',
-        headers:{'Content-Type':'application/json'},
+        mode:'no-cors',
+        headers:{'Content-Type':'text/plain'},
         body:JSON.stringify({id:item.id, gifter_name:name})
       });
-      const json=await res.json();
-      if(json.already_reserved){
-        closeModalUsedBtn();
-        showToast('⚠️ Just taken by someone else — please choose another!');
-        await loadRegistry();
-        return;
-      }
     }catch(err){
       console.warn('Apps Script unreachable, marking locally:', err);
     }
@@ -803,25 +820,14 @@ async function confirmReserve(){
   const scriptUrl=CONFIG.APPS_SCRIPT_URL;
   if(scriptUrl && scriptUrl!=='YOUR_APPS_SCRIPT_URL_HERE'){
     try{
-      const res=await fetch(scriptUrl,{
+      // no-cors required: GitHub Pages cannot read Apps Script responses directly
+      // The POST still reaches and updates the sheet
+      await fetch(scriptUrl,{
         method:'POST',
-        headers:{'Content-Type':'application/json'},
+        mode:'no-cors',
+        headers:{'Content-Type':'text/plain'},
         body:JSON.stringify({id:item.id, gifter_name:gifterName})
       });
-      const json=await res.json();
-
-      if(json.already_reserved){
-        // Someone else just reserved it — tell the user
-        closeModalBtn();
-        showToast('⚠️ Just taken by someone else — please choose another!');
-        // Reload to get fresh data
-        await loadRegistry();
-        return;
-      }
-      if(!json.success){
-        console.warn('Apps Script error:', json.error);
-        // Fall through and mark locally anyway
-      }
     }catch(err){
       console.warn('Apps Script unreachable, marking locally:', err);
       // Fall through — mark locally so UX is not broken
@@ -967,37 +973,16 @@ async function runAppsScriptReserveTest(){
   s.innerHTML = '⏳ POSTing to:<br><span style="font-size:.68rem;opacity:.6;word-break:break-all">' + url + '</span>';
 
   try {
-    const res = await fetch(url, {
+    // no-cors is required for GitHub Pages → Google Apps Script
+    // We cannot read the response, but the POST still reaches the sheet
+    await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify({ id: '1', gifter_name: 'Debug Test' })
     });
-
-    // Show HTTP status
-    const httpStatus = res.status + ' ' + res.statusText;
-    const text = await res.text();
-    let json;
-    try { json = JSON.parse(text); } catch(e){ json = null; }
-
-    // Log full raw response to console for detailed debugging
-    console.log('Apps Script raw response:', text);
-
-    if(json && json.success){
-      s.innerHTML = '✅ <strong>Working!</strong> Check sheet — id=1 should be "true".<br><span style="opacity:.5">HTTP: ' + httpStatus + '</span>';
-      s.style.color = '#8BAF8E';
-    } else if(json && json.already_reserved){
-      s.innerHTML = '✅ <strong>Connection works!</strong> Item already reserved from earlier test.<br>Set cell back to false to test again.<br><span style="opacity:.5">HTTP: ' + httpStatus + '</span>';
-      s.style.color = '#8BAF8E';
-    } else if(json && json.error){
-      s.innerHTML = '⚠️ Script error: <strong>' + json.error + '</strong><br><span style="opacity:.5">HTTP: ' + httpStatus + '</span><br><br>Fix: check SHEET_NAME and column numbers in Apps Script.';
-      s.style.color = '#e0c070';
-    } else if(text.includes('<!DOCTYPE') || text.includes('<html')){
-      s.innerHTML = '❌ <strong>Got HTML instead of JSON</strong> (HTTP ' + httpStatus + ')<br><br>This means the URL is wrong or the script is not deployed.<br><br>Fix: In Apps Script → Deploy → Manage deployments → copy the URL again. It must end in <strong>/exec</strong>';
-      s.style.color = '#e07070';
-    } else {
-      s.innerHTML = '⚠️ Unexpected response (HTTP ' + httpStatus + '):<br><span style="font-size:.7rem">' + text.substring(0,200) + '</span>';
-      s.style.color = '#e0c070';
-    }
+    s.innerHTML = '✅ <strong>Request sent!</strong><br>Wait 3 seconds then check your Google Sheet — row for id=1 should show "true" in the reserved column.<br><br><span style="opacity:.5">Note: browser security (CORS) prevents reading the response directly, but the request reaches the sheet.</span>';
+    s.style.color = '#8BAF8E';
   } catch(err){
     // A fetch() exception almost always means CORS
     s.innerHTML = '❌ <strong>CORS block or network error</strong><br><em>' + err.message + '</em><br><br>' +
