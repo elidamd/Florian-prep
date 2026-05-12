@@ -11,7 +11,7 @@ const CONFIG = {
   SHEET_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRXdDYHy2jEIvM8Mp4_iUlobZVf3uUP6XyFeyHW-fWsh0XbxG4PcynqFvYJh1O3O0Ej9VTTjOrieij7/pub?output=tsv',
 
   // ── Amazon Wish List URL (shown as a link in the notice text) ──
-  AMAZON_WISHLIST_URL: 'YOUR_AMAZON_WISHLIST_URL',
+  AMAZON_WISHLIST_URL: 'https://www.amazon.de/baby-reg/pollyana-santos-juli-2026-hamburg/1O4Z1UYBAPZEA',
 
   // ── PayPal.me ───────────────────────────────────────────────────
   PAYPAL_ME:    'https://paypal.me/EMDreer',
