@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════
 //  Baby Registry — Configuration
 //  Edit ONLY this file. Never need to touch index.html again.
-//  Elida 001
+//  Elida 002
 // ═══════════════════════════════════════════════════════════════════
 
 const CONFIG = {
@@ -60,7 +60,7 @@ const CONFIG = {
   COLS: {
     id:0, name:1, name_de:2, category:3, emoji:4,
     price:5, priority:6, description:7, description_de:8,
-    amazon_url:9, search_query:10, reserved:11, can_gift_used:12, store_name:13, store_url:14
+    amazon_url:9, search_query:10, reserved:11, gifter_name:12, can_gift_used:13, store_name:14, store_url:15
   }
 
 };
