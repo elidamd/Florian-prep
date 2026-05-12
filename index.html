@@ -249,7 +249,6 @@ footer{text-align:center;padding:32px 16px;font-size:.72rem;color:var(--ink-fain
 
 /* ── RESPONSIVE ── */
 @media(max-width:600px){
-  .sh-inner{grid-template-columns:1fr}
   .hero h1{font-size:2.6rem}
   .items-grid{grid-template-columns:1fr}
   .gutschein-section{padding:28px 20px}
@@ -335,7 +334,7 @@ footer{text-align:center;padding:32px 16px;font-size:.72rem;color:var(--ink-fain
 <div class="notice-wrap">
   <div class="notice">
     <span class="notice-icon">💡</span>
-    <span id="notice-text">Items link directly to Amazon.de. Buying through our wish list gives us a <strong>15% Gutschein</strong> — which we use to buy more essentials. Each card also has an <strong>Other stores</strong> button if you prefer shopping elsewhere.</span>
+    <span id="notice-text">We put together our wish list on Amazon to make it easy — but we want to offer you more options. By purchasing through the <strong>Amazon link</strong>, the gift is sent directly to our home. For any remaining items, we also receive a <strong>discount on our next purchase</strong>. Each card has an <strong>Other Stores</strong> button if you prefer shopping elsewhere.</span>
   </div>
 </div>
 
@@ -818,15 +817,16 @@ function copyIBAN(){
 function initPaymentSection(){
   const b=CONFIG.BANK;
   const bankPanel=document.getElementById('panel-bank');
-  if(b&&b.iban&&!b.iban.includes('DE00')){
-    document.getElementById('iban-name').textContent=b.name;
+  const divider=document.querySelector('.pay-divider');
+  if(b&&b.iban&&b.iban.trim()!==''){
+    document.getElementById('iban-name').textContent=b.name||'—';
     document.getElementById('iban-val').textContent=b.iban;
-    document.getElementById('iban-bic').textContent=b.bic;
-    document.getElementById('iban-bank').textContent=b.bank;
+    document.getElementById('iban-bic').textContent=b.bic||'—';
+    document.getElementById('iban-bank').textContent=b.bank||'—';
   } else {
+    // Hide bank column only if IBAN is genuinely empty
     if(bankPanel) bankPanel.style.display='none';
-    const div=document.querySelector('.pay-divider');
-    if(div) div.style.display='none';
+    if(divider) divider.style.display='none';
   }
 }
 
