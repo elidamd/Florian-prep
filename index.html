@@ -333,7 +333,7 @@ footer{text-align:center;padding:32px 16px;font-size:.72rem;color:var(--ink-fain
 <div class="notice-wrap">
   <div class="notice">
     <span class="notice-icon">💡</span>
-    <span id="notice-text">We put together our wish list on Amazon to make it easy — but we want to offer you more options. By purchasing through the <a id="notice-amazon-link" href="#" target="_blank" rel="noopener" style="color:var(--sage-deep);font-weight:600;text-decoration:none">Amazon Wish List</a>, the gift is sent directly to our home. For any remaining items, we also receive a <strong>discount on our next purchase</strong>. Each card has an <strong>Other Stores</strong> button if you prefer shopping elsewhere.</span>
+    <span id="notice-text">We put together our wish list on Amazon to make it easy — but we want to offer you more options. By purchasing through the <a href="https://www.amazon.de/baby-reg/pollyana-santos-juli-2026-hamburg/1O4Z1UYBAPZEA" target="_blank" rel="noopener" style="color:var(--sage-deep);font-weight:600;text-decoration:none">Amazon Wish List</a>, the gift is sent directly to our home. For any remaining items, we also receive a <strong>discount on our next purchase</strong>. Each card has an <strong>Other Stores</strong> button if you prefer shopping elsewhere.</span>
   </div>
 </div>
 
@@ -442,24 +442,6 @@ footer{text-align:center;padding:32px 16px;font-size:.72rem;color:var(--ink-fain
 
 <div class="toast" id="toast"></div>
 
-<!-- ── APPS SCRIPT DEBUG PANEL (remove after testing) ── -->
-<div id="as-test-panel" style="position:fixed;bottom:20px;left:20px;z-index:9999;background:#1C1712;color:#F5F0E8;border-radius:14px;padding:18px 20px;font-family:Jost,sans-serif;font-size:.8rem;box-shadow:0 8px 32px rgba(0,0,0,.4);max-width:340px">
-  <div style="font-weight:600;margin-bottom:4px;color:#8BAF8E;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase">🔧 Apps Script Debug</div>
-  <div style="color:rgba(245,240,232,.5);font-size:.72rem;margin-bottom:12px">Remove this panel once reservations are working.</div>
-  <div id="as-status" style="background:rgba(255,255,255,.06);border-radius:8px;padding:10px 12px;font-size:.74rem;line-height:1.7;margin-bottom:12px;min-height:60px;color:rgba(245,240,232,.7);word-break:break-all">Status: waiting…</div>
-  <button onclick="runAppsScriptTest()" style="width:100%;padding:9px;background:#4A7050;color:white;border:none;border-radius:8px;font-family:Jost,sans-serif;font-size:.8rem;font-weight:600;cursor:pointer;margin-bottom:6px">▶ Test Apps Script connection</button>
-  <button onclick="runAppsScriptReserveTest()" style="width:100%;padding:9px;background:#C2714F;color:white;border:none;border-radius:8px;font-family:Jost,sans-serif;font-size:.8rem;font-weight:600;cursor:pointer;margin-bottom:6px">▶ Test reserve item id=1</button>
-  <button onclick="document.getElementById('as-test-panel').remove()" style="width:100%;padding:7px;background:transparent;color:rgba(245,240,232,.4);border:1px solid rgba(255,255,255,.1);border-radius:8px;font-family:Jost,sans-serif;font-size:.75rem;cursor:pointer">✕ Close</button>
-</div>
-
-<!-- ── EMAIL TEST PANEL (remove after testing) ── -->
-<div id="email-test-panel" style="position:fixed;bottom:20px;left:20px;z-index:9999;background:#1C1712;color:#F5F0E8;border-radius:14px;padding:18px 20px;font-family:Jost,sans-serif;font-size:.8rem;box-shadow:0 8px 32px rgba(0,0,0,.4);max-width:320px">
-  <div style="font-weight:600;margin-bottom:4px;color:#8BAF8E;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase">📧 EmailJS Test Panel</div>
-  <div style="color:rgba(245,240,232,.5);font-size:.72rem;margin-bottom:12px">Remove this panel once emails are working.</div>
-  <div id="email-test-status" style="background:rgba(255,255,255,.06);border-radius:8px;padding:10px 12px;font-size:.75rem;line-height:1.6;margin-bottom:12px;min-height:48px;color:rgba(245,240,232,.7)">Status: waiting…</div>
-  <button onclick="runEmailTest()" style="width:100%;padding:9px;background:#4A7050;color:white;border:none;border-radius:8px;font-family:Jost,sans-serif;font-size:.8rem;font-weight:600;cursor:pointer;margin-bottom:6px">▶ Send Test Email</button>
-  <button onclick="document.getElementById('email-test-panel').remove()" style="width:100%;padding:7px;background:transparent;color:rgba(245,240,232,.4);border:1px solid rgba(255,255,255,.1);border-radius:8px;font-family:Jost,sans-serif;font-size:.75rem;cursor:pointer">✕ Close panel</button>
-</div>
 
 <footer><span id="footer-text">Made with love 🌿 · Please let us know when you reserve something!</span></footer>
 
@@ -929,122 +911,7 @@ applyStrings();
 loadRegistry();
 initPaymentSection();
 
-// ── APPS SCRIPT DEBUG FUNCTIONS (remove after testing) ──────────────
-async function runAppsScriptTest(){
-  const s = document.getElementById('as-status');
-  const url = CONFIG.APPS_SCRIPT_URL;
-  s.style.color = 'rgba(245,240,232,.7)';
 
-  if(!url || url === 'YOUR_APPS_SCRIPT_URL_HERE'){
-    s.innerHTML = '❌ <strong>APPS_SCRIPT_URL not set in config.js</strong><br>Paste your deployed Web App URL.';
-    s.style.color = '#e07070'; return;
-  }
-
-  s.innerHTML = '⏳ Testing GET connection to Apps Script…<br><span style="opacity:.5">' + url.substring(0,60) + '…</span>';
-  try {
-    const res = await fetch(url);
-    const text = await res.text();
-    let json;
-    try { json = JSON.parse(text); } catch(e){ json = null; }
-    if(res.ok && json && json.status){
-      s.innerHTML = '✅ <strong>Connection OK!</strong><br>Response: ' + JSON.stringify(json) + '<br><span style="opacity:.6">Now try "Test reserve item id=1"</span>';
-      s.style.color = '#8BAF8E';
-    } else {
-      s.innerHTML = '⚠️ Got response but unexpected format:<br>' + text.substring(0,200);
-      s.style.color = '#e0c070';
-    }
-  } catch(err){
-    s.innerHTML = '❌ <strong>CORS or network error</strong><br>' + err.message + '<br><br><strong>Most likely fix:</strong> In Apps Script deploy settings, make sure "Who has access" is set to <strong>Anyone</strong> (not "Anyone with Google account").';
-    s.style.color = '#e07070';
-    console.error('Apps Script GET error:', err);
-  }
-}
-
-async function runAppsScriptReserveTest(){
-  const s = document.getElementById('as-status');
-  const url = CONFIG.APPS_SCRIPT_URL;
-  s.style.color = 'rgba(245,240,232,.7)';
-
-  if(!url || url === 'YOUR_APPS_SCRIPT_URL_HERE'){
-    s.innerHTML = '❌ APPS_SCRIPT_URL not set in config.js'; s.style.color='#e07070'; return;
-  }
-
-  // Show the exact URL being called so we can verify it
-  s.innerHTML = '⏳ POSTing to:<br><span style="font-size:.68rem;opacity:.6;word-break:break-all">' + url + '</span>';
-
-  try {
-    // no-cors is required for GitHub Pages → Google Apps Script
-    // We cannot read the response, but the POST still reaches the sheet
-    await fetch(url, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({ id: '1', gifter_name: 'Debug Test' })
-    });
-    s.innerHTML = '✅ <strong>Request sent!</strong><br>Wait 3 seconds then check your Google Sheet — row for id=1 should show "true" in the reserved column.<br><br><span style="opacity:.5">Note: browser security (CORS) prevents reading the response directly, but the request reaches the sheet.</span>';
-    s.style.color = '#8BAF8E';
-  } catch(err){
-    // A fetch() exception almost always means CORS
-    s.innerHTML = '❌ <strong>CORS block or network error</strong><br><em>' + err.message + '</em><br><br>' +
-      '<strong>Most likely fix:</strong><br>' +
-      '1. In Apps Script → Deploy → Manage deployments<br>' +
-      '2. Click ✏️ edit → check <strong>"Who has access" = Anyone</strong><br>' +
-      '3. If it already says Anyone: save a new version and redeploy<br>' +
-      '4. Copy the NEW URL into config.js';
-    s.style.color = '#e07070';
-    console.error('Fetch error (full):', err);
-  }
-}
-// ─────────────────────────────────────────────────────────────────────
-
-// ── EMAIL TEST FUNCTION (remove after testing) ──────────────────────
-async function runEmailTest(){
-  const status = document.getElementById('email-test-status');
-  const E = CONFIG.EMAIL;
-  status.style.color = 'rgba(245,240,232,.7)';
-
-  // Step 1: check config
-  if(!E || !E.service_id || E.service_id === 'YOUR_EMAILJS_SERVICE_ID'){
-    status.innerHTML = '❌ <strong>CONFIG not filled in.</strong><br>Open index.html and paste your EmailJS service_id, template_id, public_key, and to_email into the CONFIG.EMAIL block.';
-    status.style.color = '#e07070';
-    return;
-  }
-  status.innerHTML = '⏳ Initialising EmailJS…';
-
-  try {
-    emailjs.init(E.public_key);
-    status.innerHTML = '⏳ Sending test email to <strong>' + E.to_email + '</strong>…';
-
-    const result = await emailjs.send(E.service_id, E.template_id, {
-      to_email:    E.to_email,
-      from_name:   'Baby Registry 🌿 (test)',
-      subject:     '🧪 Test: Baby Registry Email is working!',
-      gifter_name: 'Test Guest',
-      item_name:   'Baby Sleeping Bag (TEST)',
-      gift_kind:   'test',
-      message:     'This is a test message from your baby registry website.',
-      registry_url: window.location.href,
-    });
-
-    status.innerHTML = '✅ <strong>Email sent! Check your inbox.</strong><br>Status: ' + result.status + ' ' + result.text + '<br><span style="opacity:.6">If not in inbox, check spam.</span>';
-    status.style.color = '#8BAF8E';
-
-  } catch(err) {
-    status.style.color = '#e07070';
-    // Give a helpful message per error type
-    if(typeof err === 'object' && err.text){
-      if(err.status === 400) status.innerHTML = '❌ <strong>Bad request (400)</strong><br>Your <code>template_id</code> or <code>service_id</code> is wrong. Check them in the EmailJS dashboard.';
-      else if(err.status === 401) status.innerHTML = '❌ <strong>Unauthorised (401)</strong><br>Your <code>public_key</code> is wrong. Copy it from EmailJS → Account → General.';
-      else if(err.status === 403) status.innerHTML = '❌ <strong>Forbidden (403)</strong><br>Your EmailJS account may be blocked or domain not whitelisted. Check EmailJS dashboard.';
-      else if(err.status === 422) status.innerHTML = '❌ <strong>Template error (422)</strong><br>A variable in your EmailJS template does not match what the code sends. Check the template uses <code>{{to_email}}</code>, <code>{{subject}}</code>, <code>{{gifter_name}}</code>, <code>{{message}}</code>.';
-      else status.innerHTML = '❌ Error ' + err.status + ': ' + err.text;
-    } else {
-      status.innerHTML = '❌ <strong>Network or script error</strong><br>' + (err.message || JSON.stringify(err)) + '<br><span style="opacity:.6">Check your internet connection and that the EmailJS script loaded.</span>';
-    }
-    console.error('EmailJS test error:', err);
-  }
-}
-// ────────────────────────────────────────────────────────────────────
 </script>
 </body>
 </html>
