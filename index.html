@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Baby Registry 🌿</title>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -442,43 +441,23 @@ footer{text-align:center;padding:32px 16px;font-size:.72rem;color:var(--ink-fain
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- ── EMAIL TEST PANEL (remove after testing) ── -->
+<div id="email-test-panel" style="position:fixed;bottom:20px;left:20px;z-index:9999;background:#1C1712;color:#F5F0E8;border-radius:14px;padding:18px 20px;font-family:Jost,sans-serif;font-size:.8rem;box-shadow:0 8px 32px rgba(0,0,0,.4);max-width:320px">
+  <div style="font-weight:600;margin-bottom:4px;color:#8BAF8E;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase">📧 EmailJS Test Panel</div>
+  <div style="color:rgba(245,240,232,.5);font-size:.72rem;margin-bottom:12px">Remove this panel once emails are working.</div>
+  <div id="email-test-status" style="background:rgba(255,255,255,.06);border-radius:8px;padding:10px 12px;font-size:.75rem;line-height:1.6;margin-bottom:12px;min-height:48px;color:rgba(245,240,232,.7)">Status: waiting…</div>
+  <button onclick="runEmailTest()" style="width:100%;padding:9px;background:#4A7050;color:white;border:none;border-radius:8px;font-family:Jost,sans-serif;font-size:.8rem;font-weight:600;cursor:pointer;margin-bottom:6px">▶ Send Test Email</button>
+  <button onclick="document.getElementById('email-test-panel').remove()" style="width:100%;padding:7px;background:transparent;color:rgba(245,240,232,.4);border:1px solid rgba(255,255,255,.1);border-radius:8px;font-family:Jost,sans-serif;font-size:.75rem;cursor:pointer">✕ Close panel</button>
+</div>
+
 <footer><span id="footer-text">Made with love 🌿 · Please let us know when you reserve something!</span></footer>
 
-<script>
-// ══════════════════════════════════════════════
-//  ⚙️  CONFIGURATION
-// ══════════════════════════════════════════════
-const CONFIG = {
-  SHEET_URL:    'https://docs.google.com/spreadsheets/d/e/2PACX-1vRXdDYHy2jEIvM8Mp4_iUlobZVf3uUP6XyFeyHW-fWsh0XbxG4PcynqFvYJh1O3O0Ej9VTTjOrieij7/pub?output=tsv',
-  PAYPAL_ME:    'https://paypal.me/EMDreer',
-  WHATSAPP:     'YOUR_WHATSAPP_NUMBER',   // e.g. '4915112345678'
-  BANK: {
-    name: 'Pollyana Ferreira dos Santos',          // e.g. 'Ana Silva'
-    iban: 'DE02 1001 1001 2627 1299 30', // your IBAN
-    bic:  'NTSBDEB1XXX',        // N26 BIC
-    bank: 'N26 Bank',
-  },
-  DUE_DATE:     '25. Jul 2026',
-  EVENT: {
-    date:     'Saturday, 30 May 2026',
-    time:     '15:30 Uhr',
-    location: 'Your address here',
-    desc_en:  "We're so happy to be surrounded by the people we love. Whether you join us in person or from afar — thank you for being part of this journey.",
-    desc_de:  "Wir freuen uns so sehr, von den Menschen umgeben zu sein, die wir lieben. Ob du persönlich dabei bist oder aus der Ferne — danke, dass du Teil dieser Reise bist.",
-  },
-  // ── EMAIL (EmailJS) ──────────────────────────────────────────────────
-  // Sign up free at emailjs.com, create a service + template, paste IDs here
-  EMAIL: {
-    service_id:  'service_r76eiue',   // e.g. 'service_abc123'
-    template_id: 'template_a0dro0i',  // e.g. 'template_xyz789'
-    public_key:  'HtZ3R0q6St_a8l76q',   // e.g. 'AbCdEfGhIjKlMnOp'
-    to_email:    'pollyana_ferreiras@hotmail.com',    // where notifications go
-  },
-  // ─────────────────────────────────────────────────────────────────────
-  COLS: { id:0,name:1,name_de:2,category:3,emoji:4,price:5,priority:6,description:7,description_de:8,amazon_url:9,search_query:10,reserved:11,can_gift_used:12 }
-};
-// ══════════════════════════════════════════════
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="config.js"></script>
 
+<script>
+// CONFIG loaded from config.js — edit that file, not this one.
 let lang='en', allItems=[], currentFilter='all', pendingReserveId=null;
 
 const STRINGS = {
@@ -871,6 +850,55 @@ const DEMO_ITEMS=[
 applyStrings();
 loadRegistry();
 initPaymentSection();
+
+// ── EMAIL TEST FUNCTION (remove after testing) ──────────────────────
+async function runEmailTest(){
+  const status = document.getElementById('email-test-status');
+  const E = CONFIG.EMAIL;
+  status.style.color = 'rgba(245,240,232,.7)';
+
+  // Step 1: check config
+  if(!E || !E.service_id || E.service_id === 'YOUR_EMAILJS_SERVICE_ID'){
+    status.innerHTML = '❌ <strong>CONFIG not filled in.</strong><br>Open index.html and paste your EmailJS service_id, template_id, public_key, and to_email into the CONFIG.EMAIL block.';
+    status.style.color = '#e07070';
+    return;
+  }
+  status.innerHTML = '⏳ Initialising EmailJS…';
+
+  try {
+    emailjs.init(E.public_key);
+    status.innerHTML = '⏳ Sending test email to <strong>' + E.to_email + '</strong>…';
+
+    const result = await emailjs.send(E.service_id, E.template_id, {
+      to_email:    E.to_email,
+      from_name:   'Baby Registry 🌿 (test)',
+      subject:     '🧪 Test: Baby Registry Email is working!',
+      gifter_name: 'Test Guest',
+      item_name:   'Baby Sleeping Bag (TEST)',
+      gift_kind:   'test',
+      message:     'This is a test message from your baby registry website.',
+      registry_url: window.location.href,
+    });
+
+    status.innerHTML = '✅ <strong>Email sent! Check your inbox.</strong><br>Status: ' + result.status + ' ' + result.text + '<br><span style="opacity:.6">If not in inbox, check spam.</span>';
+    status.style.color = '#8BAF8E';
+
+  } catch(err) {
+    status.style.color = '#e07070';
+    // Give a helpful message per error type
+    if(typeof err === 'object' && err.text){
+      if(err.status === 400) status.innerHTML = '❌ <strong>Bad request (400)</strong><br>Your <code>template_id</code> or <code>service_id</code> is wrong. Check them in the EmailJS dashboard.';
+      else if(err.status === 401) status.innerHTML = '❌ <strong>Unauthorised (401)</strong><br>Your <code>public_key</code> is wrong. Copy it from EmailJS → Account → General.';
+      else if(err.status === 403) status.innerHTML = '❌ <strong>Forbidden (403)</strong><br>Your EmailJS account may be blocked or domain not whitelisted. Check EmailJS dashboard.';
+      else if(err.status === 422) status.innerHTML = '❌ <strong>Template error (422)</strong><br>A variable in your EmailJS template does not match what the code sends. Check the template uses <code>{{to_email}}</code>, <code>{{subject}}</code>, <code>{{gifter_name}}</code>, <code>{{message}}</code>.';
+      else status.innerHTML = '❌ Error ' + err.status + ': ' + err.text;
+    } else {
+      status.innerHTML = '❌ <strong>Network or script error</strong><br>' + (err.message || JSON.stringify(err)) + '<br><span style="opacity:.6">Check your internet connection and that the EmailJS script loaded.</span>';
+    }
+    console.error('EmailJS test error:', err);
+  }
+}
+// ────────────────────────────────────────────────────────────────────
 </script>
 </body>
 </html>
