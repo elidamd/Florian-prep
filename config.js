@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════
 //  Baby Registry — Configuration
 //  Edit ONLY this file. Never need to touch index.html again.
-//  Elida 002
+//  Elida 003
 // ═══════════════════════════════════════════════════════════════════
 
 const CONFIG = {
@@ -50,7 +50,7 @@ const CONFIG = {
   // ── Google Apps Script URL (auto-reserve) ─────────────────────────
   // After deploying the Apps Script, paste the Web App URL here.
   // See APPS_SCRIPT_SETUP.md for instructions.
-  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxz64I-hltQ1JbtLZt_fZgGdBZrCSiAFvL-VX2n8KtEvVNLhte2ripBqWcFazhjJFwjhA/exec',
+  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwUZ1yUYvyWzuzbw2OOsXaA0rZFjO2YO4KuiwCcg376pJPlkUI0-Qy0aQyTmnov71_dBg/exec',
 
 
   // ── Column order in your Google Sheet (do not change) ──────────
